@@ -5,14 +5,20 @@
 				Whitelist
 				<v-spacer></v-spacer>
 				<v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+				<v-btn @click="refreshUserData" style="margin-left: 2rem" :disabled="!user"><v-icon>mdi-autorenew</v-icon></v-btn>
 			</v-card-title>
-			<v-data-table :headers="headers" :items="user" :search="search">
+			<v-data-table :headers="headers" :items="user" :search="search" :items-per-page.sync="numItems">
 				<template v-slot:item="{ item }">
 					<tr>
 						<td v-for="(col, columnIndex) in headers" v-bind:key="columnIndex">
 							<v-layout justify-center>
 								<div v-if="columnIndex > 1">
-									<v-checkbox color="accent" v-model="item.whitelists[col.value].enabled" r></v-checkbox>
+									<v-checkbox
+										dense
+										color="accent"
+										v-model="item.whitelists[col.value].enabled"
+										@change="updateWhitelist(item.id, item.whitelists[col.value].id, item.whitelists[col.value].enabled)"
+									></v-checkbox>
 								</div>
 								<div v-else-if="columnIndex === 0 || columnIndex === 1">
 									<p>{{ item[col.value] }}</p>
@@ -28,56 +34,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { applyWhitelist, getAvailableWhitelist, getWhitelistAllUser } from "@/services/api";
 import SetWhitelistUser from "@/models/SetWhitelistUser";
 import UserWhitelist from "@/models/UserWhitelist";
 import Snackbar from "@/components/snackbar/snackbar.vue";
-import { DataTableHeader } from "vuetify";
 @Component({
 	components: { Snackbar },
 })
 export default class WhitelistTable extends Vue {
-	public dialog = false;
-	public player: UserWhitelist | string = "";
+	constructor() {
+		super();
+		this.numItems = Number(WhitelistTable.getItemsPerPage);
+	}
 	private color = "";
+	private numItems: number | null;
 	private text = "";
 	public open = false;
-	public openDialog(item: UserWhitelist) {
-		this.dialog = true;
-		this.player = item;
-	}
-	public save(player: UserWhitelist) {
-		const whitelist: SetWhitelistUser[] = [];
-		player.whitelists.forEach(userWhitelist => {
-			whitelist.push({
-				playerId: player.id,
-				enabled: userWhitelist.enabled,
-				whitelistId: userWhitelist.id,
-			});
-		});
-		if (applyWhitelist(whitelist)) {
-			this.dialog = false;
-			this.color = "green";
-			this.text = "Successfully whitelisted User";
-			this.open = true;
-		} else {
-			this.color = "red";
-			this.text = "Failed to whitelist User";
-			this.open = true;
-		}
-	}
 	public search = "";
 	public headers = [
 		{
 			text: "Player Uid",
 			align: "center",
-			sortable: false,
+			sortable: true,
 			value: "playerUid",
 		},
-		{ text: "Name", value: "playerName", align: "center", sortable: false },
+		{ text: "Name", value: "playerName", align: "center", sortable: true },
 	];
-	private customHeaders: DataTableHeader[] = [];
 	public user: UserWhitelist[] = [];
 	created() {
 		getAvailableWhitelist().then(availableWhitelist => {
@@ -88,13 +71,41 @@ export default class WhitelistTable extends Vue {
 					sortable: false,
 					align: "center",
 				});
-				this.customHeaders.push({
-					value: `${avWhitelist.id - 1}`,
-					text: avWhitelist.description,
-					sortable: false,
-				});
 			});
 		});
+		this.refreshUserData();
+	}
+
+	@Watch("numItems")
+	onPropertyChanged(value: number) {
+		if (value) {
+			localStorage.setItem("itemsPerPageWhitelist", value.toString());
+		}
+	}
+
+	private static get getItemsPerPage() {
+		return localStorage.getItem("itemsPerPageWhitelist") !== null ? localStorage.getItem("itemsPerPageWhitelist") : "10";
+	}
+
+	private updateWhitelist(playerId: number, whitelistId: number, enabled: boolean) {
+		const whitelist: SetWhitelistUser[] = [];
+		whitelist.push({
+			playerId: playerId,
+			enabled: enabled,
+			whitelistId: whitelistId,
+		});
+		if (applyWhitelist(whitelist)) {
+			this.color = "green";
+			this.text = "Successfully whitelisted User";
+			this.open = true;
+		} else {
+			this.color = "red";
+			this.text = "Failed to whitelist User";
+			this.open = true;
+		}
+	}
+
+	private refreshUserData() {
 		getWhitelistAllUser().then(data => {
 			this.user = data;
 		});
