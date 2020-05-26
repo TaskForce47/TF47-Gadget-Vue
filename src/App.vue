@@ -99,7 +99,7 @@
 					<router-view />
 				</v-content>
 
-				<v-footer app color="transparent elevation-0" inset>
+				<v-footer app color="transparent elevation-0" absolute>
 					<v-col class="text-right">
 						&copy; 2020 Task Force 47
 					</v-col>
