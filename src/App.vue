@@ -19,7 +19,7 @@
 					<v-spacer></v-spacer>
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on }">
-							<v-btn min-width="0" text v-on="on" to="/">
+							<v-btn min-width="0" text v-on="on" to="/" class="ml-4">
 								<v-icon>mdi-home</v-icon>
 							</v-btn>
 						</template>
@@ -60,17 +60,59 @@
 						</template>
 						<v-list dense>
 							<v-list-item-group>
-								<v-list-item to="/administration/whitelist">
+								<v-list-item to="/administration/playermanager">
 									<v-list-item-icon>
 										<v-icon>mdi-account-cog</v-icon>
 									</v-list-item-icon>
 									<v-list-item-content>
-										<v-list-item-title>Whitelist</v-list-item-title>
+										<v-list-item-title>Playermanager</v-list-item-title>
+									</v-list-item-content>
+								</v-list-item>
+								<v-list-item to="/administration/squadmanager">
+									<v-list-item-icon>
+										<v-icon>mdi-account-supervisor</v-icon>
+									</v-list-item-icon>
+									<v-list-item-content>
+										<v-list-item-title>Squadmanager</v-list-item-title>
+									</v-list-item-content>
+								</v-list-item>
+								<v-list-item to="/administration/logs">
+									<v-list-item-icon>
+										<v-icon>mdi-account-supervisor</v-icon>
+									</v-list-item-icon>
+									<v-list-item-content>
+										<v-list-item-title>Logs</v-list-item-title>
 									</v-list-item-content>
 								</v-list-item>
 							</v-list-item-group>
 						</v-list>
 					</v-menu>
+					<v-tooltip bottom>
+						<template v-slot:activator="{ on }">
+							<v-btn min-width="0" text v-on="on" to="/user">
+								<v-icon>mdi-account</v-icon>
+							</v-btn>
+						</template>
+						<span>Profile</span>
+					</v-tooltip>
+				</v-app-bar>
+
+				<v-main class="mt-9 px-9" :style="{ background: $vuetify.theme.themes[theme].background }">
+					<router-view />
+					<v-snackbar
+						v-model="$tstore.state.snackbar.showing"
+						:color="$vuetify.theme.themes[theme][$tstore.state.snackbar.type]"
+						:timeout="$tstore.state.snackbar.timeout"
+						@input="$emit('update:open', false)"
+					>
+						{{ $tstore.state.snackbar.text }}
+						<v-btn color="black" text @click="$tstore.state.snackbar.showing = false">
+							Close
+						</v-btn>
+					</v-snackbar>
+				</v-main>
+
+				<v-footer app color="transparent elevation-0" absolute>
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on }">
 							<v-checkbox
@@ -84,60 +126,58 @@
 						</template>
 						<span>Toggle Dark/Light</span>
 					</v-tooltip>
-
-					<v-tooltip bottom>
-						<template v-slot:activator="{ on }">
-							<v-btn min-width="0" text v-on="on" to="/user">
-								<v-icon>mdi-account</v-icon>
-							</v-btn>
-						</template>
-						<span>Profile</span>
-					</v-tooltip>
-				</v-app-bar>
-
-				<v-content class="mt-9 px-9" :style="{ background: $vuetify.theme.themes[theme].background }">
-					<router-view />
-				</v-content>
-
-				<v-footer app color="transparent elevation-0" absolute>
+					<notifications></notifications>
 					<v-col class="text-right">
 						&copy; 2020 Task Force 47
 					</v-col>
 				</v-footer>
 			</v-app>
 		</div>
-		<div v-else style="display: flex; justify-content: center; align-items: center; height: 100%; color: white">
+		<div
+			v-else-if="loggedIn === false && ready"
+			style="display: flex; justify-content: center; align-items: center; height: 100%; color: white"
+		>
 			<h1>No connection to api</h1>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import { checkIfLoggedIn, getRoles } from "@/services/api";
-@Component
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import Notifications from '@/components/notifications/notifications.vue';
+import { authenticate, getRoles } from '@/services/user';
+@Component({
+	components: { Notifications },
+})
 export default class App extends Vue {
 	public dark = true;
 	private roles: Array<string> = [];
 	private loggedIn: boolean | null = null;
+	private ready = false;
 	public get theme() {
-		return this.$vuetify.theme.dark ? "dark" : "light";
+		return this.$vuetify.theme.dark ? 'dark' : 'light';
 	}
 	created() {
 		this.$vuetify.theme.dark = this.dark;
-		this.checkIfLoggedIn();
+		this.ready = false;
+		authenticate().then((authenticated: boolean) => {
+			this.loggedIn = authenticated;
+			this.$tstore.dispatch('setLoggedIn', this.loggedIn);
+			this.ready = true;
+		});
 	}
-	@Watch("loggedIn")
+	@Watch('loggedIn')
 	onPropertyChanged(value: boolean) {
 		if (value) {
 			this.getRoles();
 		}
 	}
-	private async checkIfLoggedIn() {
-		this.loggedIn = await checkIfLoggedIn();
-	}
-	private async getRoles() {
-		this.roles = await getRoles();
+
+	private getRoles() {
+		getRoles().then((roles: Array<string>) => {
+			this.roles = roles;
+			this.$tstore.dispatch('setRoles', this.roles);
+		});
 	}
 }
 </script>
@@ -147,6 +187,6 @@ export default class App extends Vue {
 }
 html {
 	background-color: #2c3139;
-	font-family: "Oswald", sans-serif;
+	font-family: 'Oswald', sans-serif;
 }
 </style>
