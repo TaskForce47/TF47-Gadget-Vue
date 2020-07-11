@@ -1,11 +1,12 @@
 <template>
-	<div></div>
+	<div>
+		<router-view></router-view>
+	</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 @Component
-export default class Members extends Vue {}
+export default class Administration extends Vue {}
 </script>
-
 <style scoped></style>
