@@ -1,4 +1,4 @@
-import { fetchJSON } from '@/services/utils';
+import { fetchJSON, uploadFile } from '@/services/utils';
 import { SquadI, SquadCreate, SquadMemberAdd, SquadMemberUpdate, SquadUpdate, SquadXML } from '@/services/utils/models';
 
 export async function getSquads(): Promise<Array<SquadI>> {
@@ -21,10 +21,9 @@ export async function updateSquad(squadId: number, squadObj: SquadUpdate | undef
 	return await fetchJSON(`squad/${squadId}/update`, { method: 'POST', body: JSON.stringify(squadObj) }, true);
 }
 
-//TODO
-/*export async function uploadSquadPicture(squadId: number, squadObj: SquadUpdate): Promise<boolean> {
-	return await fetchJSON(`squad/${squadId}/update`, { method: 'POST',  }, true);
-}*/
+export async function uploadSquadPicture(squadId: number, data: FormData): Promise<boolean> {
+	return await uploadFile(`squad/${squadId}/uploadSquadPicture`, { method: 'POST', body: data, headers: []  }, true);
+}
 
 export async function getSquadXML(squadId: number): Promise<SquadXML> {
 	return await fetchJSON(`squad/${squadId}/getSquadXml`, { method: 'GET' });
@@ -53,7 +52,7 @@ export async function removeSquadMember(squadId: number, memberObj: SquadMemberA
 export async function updateSquadMember(squadId: number, memberObj: SquadMemberUpdate): Promise<boolean> {
 	return await fetchJSON(
 		`squad/${squadId}/updateSquadMember`,
-		{ method: 'POST', body: JSON.stringify(memberObj) },
+		{ method: 'POST', body: JSON.stringify(memberObj), headers: { 'Content-Type': 'image/png' } },
 		true
 	);
 }

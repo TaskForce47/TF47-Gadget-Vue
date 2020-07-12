@@ -78,7 +78,7 @@
 								</v-list-item>
 								<v-list-item to="/administration/logs">
 									<v-list-item-icon>
-										<v-icon>mdi-account-supervisor</v-icon>
+										<v-icon>mdi-clipboard-text</v-icon>
 									</v-list-item-icon>
 									<v-list-item-content>
 										<v-list-item-title>Logs</v-list-item-title>
@@ -134,7 +134,7 @@
 			</v-app>
 		</div>
 		<div
-			v-else-if="loggedIn === false && ready"
+			v-else-if="loggedIn === null && ready"
 			style="display: flex; justify-content: center; align-items: center; height: 100%; color: white"
 		>
 			<h1>No connection to api</h1>
@@ -160,11 +160,16 @@ export default class App extends Vue {
 	created() {
 		this.$vuetify.theme.dark = this.dark;
 		this.ready = false;
-		authenticate().then((authenticated: boolean) => {
-			this.loggedIn = authenticated;
-			this.$tstore.dispatch('setLoggedIn', this.loggedIn);
-			this.ready = true;
-		});
+		authenticate().then(
+			(authenticated: boolean) => {
+				this.loggedIn = authenticated;
+				this.$tstore.dispatch('setLoggedIn', this.loggedIn);
+				this.ready = true;
+			},
+			error => {
+				this.ready = true;
+			}
+		);
 	}
 	@Watch('loggedIn')
 	onPropertyChanged(value: boolean) {

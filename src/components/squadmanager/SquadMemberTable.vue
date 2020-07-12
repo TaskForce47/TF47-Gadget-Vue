@@ -9,7 +9,9 @@
 					</v-list-item-content>
 
 					<v-list-item-action>
-						<v-btn depressed small @click="addSquadMember(item)" color="success"> Add </v-btn>
+						<v-btn depressed small @click="addSquadMember(item)" color="success">
+							Add
+						</v-btn>
 					</v-list-item-action>
 				</v-list-item>
 			</template>
