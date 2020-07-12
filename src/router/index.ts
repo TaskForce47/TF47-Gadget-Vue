@@ -1,20 +1,23 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import store from '../store';
+import {authenticate, getRoles} from "@/services/user";
 Vue.use(VueRouter);
 
 function beforeRouteEnter(to: any, from: any, next: (s?: string) => void) {
-	if (
-		store.state.auth.loggedIn &&
-		(store.state.auth.roles.includes('Moderator') || store.state.auth.roles.includes('Admin'))
-	) {
-		next();
-	} else {
-		store.state.snackbar.type = 'error';
-		store.state.snackbar.showing = true;
-		store.state.snackbar.text = 'You do not have permission to access this route';
-		next('/');
-	}
+	authenticate().then((authenticated: boolean) => {
+		getRoles().then((roles: Array<string>) => {
+			if (authenticated && (roles.includes('Moderator') || roles.includes('Admin'))) {
+				next();
+			} else {
+				store.state.snackbar.type = 'error';
+				store.state.snackbar.showing = true;
+				store.state.snackbar.text = 'You do not have permission to access this route';
+				next('/');
+			}
+		})
+	})
+
 }
 
 const routes: Array<RouteConfig> = [

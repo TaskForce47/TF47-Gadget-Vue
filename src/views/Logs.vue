@@ -9,6 +9,13 @@
 				:sort-by="['timeWritten']"
 				:sort-desc="['timeWritten']"
 				:single-expand="true"
+				:server-items-length="totalNotes"
+				:loading="loading"
+				:page.sync="currentPage"
+				v-on:update:page="getLatestNote()"
+				:footer-props="{
+					'items-per-page-options': [20],
+				}"
 				show-expand
 			>
 				<template v-slot:item.timeWritten="{ item }">
@@ -33,6 +40,9 @@ import { NotesLatest } from '@/services/utils/models';
 import { getLatestNotes } from '@/services/playerNotes';
 @Component
 export default class Logs extends Vue {
+	private loading: boolean = false;
+	private currentPage: number = 1;
+	private totalNotes: number = 0;
 	private headers = [
 		{
 			text: 'Moderator',
@@ -40,20 +50,32 @@ export default class Logs extends Vue {
 			sortable: false,
 			value: 'author',
 		},
+		{
+			text: 'Player',
+			value: 'playerName',
+		},
 		{ text: 'Date', value: 'timeWritten' },
 		{ text: 'Type', value: 'type' },
 		{ text: '', value: 'data-table-expand' },
 	];
 	private notes: Array<NotesLatest> | Array<undefined> = [];
 	mounted() {
-		getLatestNotes().then((res: Array<NotesLatest>) => {
-			this.notes = res;
-		});
+		this.getLatestNote();
 	}
+
 	private getColor(type: string) {
 		if (type == 'Info') return 'white';
 		else if (type == 'Ban') return 'red';
 		else return 'orange';
+	}
+
+	private getLatestNote() {
+		this.loading = true;
+		getLatestNotes(this.currentPage).then((res: any) => {
+			this.notes = res.notes;
+			this.totalNotes = res.totalNoteCount;
+			this.loading = false;
+		});
 	}
 }
 </script>

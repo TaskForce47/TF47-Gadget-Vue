@@ -37,7 +37,7 @@
 							Stats
 						</v-btn>
 					</div>
-					<v-card class="mt-8 mr-4">
+					<v-card class="mt-8 mr-4" flat>
 						<v-card-title>
 							Notes
 							<v-spacer></v-spacer>
@@ -58,7 +58,19 @@
 								</template>
 								<template v-slot:expanded-item="{ headers, item }">
 									<td :colspan="headers.length">
-										{{ item.note }}
+										<div class="d-flex ml-3">
+											<div style="width: 95%">
+												{{ item.note }}
+											</div>
+											<div class="d-flex">
+												<v-btn color="warning" icon x-small @click="openNoteEditModal(item)">
+													<v-icon>mdi-pencil</v-icon>
+												</v-btn>
+												<v-btn color="error" icon x-small @click="openNoteDeleteModal(item)">
+													<v-icon>mdi-delete</v-icon>
+												</v-btn>
+											</div>
+										</div>
 									</td>
 								</template>
 								<template v-slot:item.type="{ item }">
@@ -71,7 +83,7 @@
 					</v-card>
 				</v-col>
 				<v-col :cols="whitelistCols" class="flex-grow-1 flex-shrink-0">
-					<v-card>
+					<v-card flat>
 						<v-card-title>Whitelist</v-card-title>
 						<v-card-text class="d-flex flex-column justify-space-between" v-if="whitelists">
 							<v-checkbox
@@ -90,7 +102,6 @@
 			<v-dialog id="addModal" v-model="addModal" max-width="600" persistent>
 				<v-card>
 					<v-card-title class="headline">Add Note</v-card-title>
-
 					<v-card-text>
 						<v-form v-model="isFormValid">
 							<v-select
@@ -99,6 +110,32 @@
 								:rules="rules.ruleType"
 								v-model="formModel.type"
 							></v-select>
+							<!--							<v-menu
+								v-if="formModel.type === 'Ban'"
+								ref="menu"
+								v-model="menu"
+								:close-on-content-click="false"
+								:return-value.sync="date"
+								transition="scale-transition"
+								offset-y
+								min-width="290px"
+							>
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field
+										v-model="date"
+										label="Banned until"
+										prepend-icon="mdi-calendar"
+										readonly
+										v-bind="attrs"
+										v-on="on"
+									></v-text-field>
+								</template>
+								<v-date-picker v-model="date" no-title scrollable>
+									<v-spacer></v-spacer>
+									<v-btn text color="buttons" @click="menu = false">Cancel</v-btn>
+									<v-btn text color="buttons" @click="$refs.menu.save(date)">OK</v-btn>
+								</v-date-picker>
+							</v-menu>-->
 							<v-textarea
 								v-model="formModel.note"
 								:rules="rules.ruleNote"
@@ -110,15 +147,67 @@
 							</v-textarea>
 						</v-form>
 					</v-card-text>
-
 					<v-card-actions>
 						<v-spacer></v-spacer>
-
 						<v-btn color="blue darken-1" text @click="addModal = false">
 							Close
 						</v-btn>
 						<v-btn color="blue darken-1" :disabled="!isFormValid" text @click="addNote()">
 							Submit
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<v-dialog id="editNoteModal" v-model="showEditModal" max-width="600" persistent>
+				<v-card>
+					<v-card-title class="headline">Add Note</v-card-title>
+					<v-card-text>
+						<v-form v-model="isFormValid">
+							<v-select
+								label="Type"
+								:items="types"
+								:rules="rules.ruleType"
+								v-model="noteToEditModel.type"
+							></v-select>
+							<v-textarea
+								v-model="noteToEditModel.note"
+								:rules="rules.ruleNote"
+								clearable
+								clear-icon="mdi-close-circle"
+								color="info"
+								label="Text"
+							>
+							</v-textarea>
+						</v-form>
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="blue darken-1" text @click="showEditModal = false">
+							Close
+						</v-btn>
+						<v-btn color="blue darken-1" :disabled="!isFormValid" text @click="updateNote()">
+							Submit
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<v-dialog v-model="showDeleteModal" max-width="300">
+				<v-card>
+					<v-card-title class="headline">Delete Note</v-card-title>
+
+					<v-card-text>
+						Do you really want to delete this note?
+					</v-card-text>
+
+					<v-card-actions>
+						<v-spacer></v-spacer>
+
+						<v-btn color="blue darken-1" text @click="showDeleteModal = false">
+							Cancel
+						</v-btn>
+
+						<v-btn color="blue darken-1" text @click="deleteNote()">
+							Confirm
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -144,7 +233,7 @@ import {
 } from '@/services/utils/models';
 import { getPlayerDetails, getPlayerNotes } from '@/services/player';
 import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
-import { addPlayerNote } from '@/services/playerNotes';
+import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
 @Component
 export default class PlayerProfile extends Vue {
 	private userDetails: Player | null = null;
@@ -157,8 +246,23 @@ export default class PlayerProfile extends Vue {
 	private whitelists: WhitelistsEntity[] | null | undefined = [];
 	private ready = false;
 	private notes: Array<NotesEntity> | undefined | null = [];
-	private addModal = false;
-	private isFormValid = false;
+	private addModal: boolean = false;
+	private isFormValid: boolean = false;
+	private showEditModal: boolean = false;
+	private showDeleteModal: boolean = false;
+	private menu: boolean = false;
+	private date = new Date().toISOString().substr(0, 10);
+	private noteToEditModel: NotesEntity | undefined = {
+		authorId: 0,
+		authorName: '',
+		isModified: false,
+		lastTimeModified: null,
+		nodeId: 0,
+		note: '',
+		timeWritten: '',
+		type: '',
+	};
+	private noteToDeleteModel: NotesEntity | undefined;
 	private headers = [
 		{
 			text: 'Moderator',
@@ -299,6 +403,66 @@ export default class PlayerProfile extends Vue {
 				this.$tstore.dispatch('setSnackbar', {
 					showing: true,
 					text: 'Failed to add Note to Player',
+					type: 'error',
+				});
+			}
+		});
+	}
+
+	private openNoteEditModal(item: NotesEntity) {
+		this.noteToEditModel = item;
+		this.showEditModal = true;
+	}
+
+	private updateNote() {
+		updatePlayerNote(this.noteToEditModel?.nodeId, this.noteToEditModel).then((response: boolean) => {
+			if (response) {
+				this.getUserNotes();
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Successfully edited Note',
+					type: 'success',
+				});
+				this.formModel = {
+					note: '',
+					type: '',
+					playerId: 0,
+				};
+				this.showEditModal = false;
+			} else {
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Failed to edit Note',
+					type: 'error',
+				});
+			}
+		});
+	}
+
+	private openNoteDeleteModal(item: NotesEntity) {
+		this.noteToDeleteModel = item;
+		this.showDeleteModal = true;
+	}
+
+	private deleteNote() {
+		deletePlayerNote(this.noteToDeleteModel?.nodeId).then((response: boolean) => {
+			if (response) {
+				this.getUserNotes();
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Successfully removed Note',
+					type: 'success',
+				});
+				this.formModel = {
+					note: '',
+					type: '',
+					playerId: 0,
+				};
+				this.showDeleteModal = false;
+			} else {
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Failed to remove Note',
 					type: 'error',
 				});
 			}

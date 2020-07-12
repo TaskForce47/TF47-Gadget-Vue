@@ -17,6 +17,7 @@ export default new Vuetify({
 				background: '#2C3139',
 				backgroundTop: '#131416',
 				gadgetText: '#FF4600',
+				buttons: '#1E88E5',
 			},
 			light: {
 				primary: '#1976D2',
@@ -29,6 +30,7 @@ export default new Vuetify({
 				background: '#FFFFFF',
 				backgroundTop: '#FFFFFF',
 				gadgetText: '#FF4600',
+				buttons: '#1E88E5',
 			},
 		},
 	},
