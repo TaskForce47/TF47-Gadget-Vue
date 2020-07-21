@@ -279,9 +279,7 @@ export default class Squad extends Vue {
 	];
 	private rules = {
 		ruleSquadNick: [
-			(value: string) => !!value || 'Required.',
-			(value: string) =>
-				/^[A-Z0-9 _]*[A-Z0-9][A-Z0-9 _]*$/.test(value) || 'Only A-Z, a-z, 0-9 and spaces are allowed',
+			(value: string) => !!value || 'Required.'
 		],
 		ruleSquadName: [(value: string) => !!value || 'Required.'],
 		ruleSquadEmail: [

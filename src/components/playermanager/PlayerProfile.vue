@@ -32,10 +32,15 @@
 								</v-chip>
 							</template>
 						</div>
-						<v-btn class="ml-auto mr-4" outlined disabled>
-							<v-icon>mdi-chart-line-variant</v-icon>
-							Stats
-						</v-btn>
+						<div class="ml-auto d-flex flex-column">
+							<v-btn class="mr-4" outlined disabled>
+								<v-icon>mdi-chart-line-variant</v-icon>
+								Stats
+							</v-btn>
+							<p class="red--text" v-if="userDetails.bannedUntil !== null">
+								Banned until: {{ new Date(userDetails.bannedUntil).toLocaleString() }}
+							</p>
+						</div>
 					</div>
 					<v-card class="mt-8 mr-4" flat>
 						<v-card-title>
@@ -47,7 +52,7 @@
 							<v-data-table
 								:headers="headers"
 								:items="notes"
-								item-key="timeWritten"
+								item-key="nodeId"
 								:sort-by="['timeWritten']"
 								:sort-desc="['timeWritten']"
 								:single-expand="true"
@@ -110,19 +115,19 @@
 								:rules="rules.ruleType"
 								v-model="formModel.type"
 							></v-select>
-							<!--							<v-menu
+							<v-menu
 								v-if="formModel.type === 'Ban'"
 								ref="menu"
 								v-model="menu"
 								:close-on-content-click="false"
-								:return-value.sync="date"
+								:return-value.sync="bannedUntil"
 								transition="scale-transition"
 								offset-y
 								min-width="290px"
 							>
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field
-										v-model="date"
+										v-model="bannedUntil"
 										label="Banned until"
 										prepend-icon="mdi-calendar"
 										readonly
@@ -130,12 +135,12 @@
 										v-on="on"
 									></v-text-field>
 								</template>
-								<v-date-picker v-model="date" no-title scrollable>
+								<v-date-picker v-model="bannedUntil" no-title scrollable>
 									<v-spacer></v-spacer>
 									<v-btn text color="buttons" @click="menu = false">Cancel</v-btn>
-									<v-btn text color="buttons" @click="$refs.menu.save(date)">OK</v-btn>
+									<v-btn text color="buttons" @click="$refs.menu.save(bannedUntil)">OK</v-btn>
 								</v-date-picker>
-							</v-menu>-->
+							</v-menu>
 							<v-textarea
 								v-model="formModel.note"
 								:rules="rules.ruleNote"
@@ -231,7 +236,7 @@ import {
 	WhitelistPlayerAdd,
 	WhitelistsEntity,
 } from '@/services/utils/models';
-import { getPlayerDetails, getPlayerNotes } from '@/services/player';
+import { banPlayer, getPlayerDetails, getPlayerNotes } from '@/services/player';
 import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
 import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
 @Component
@@ -251,7 +256,7 @@ export default class PlayerProfile extends Vue {
 	private showEditModal: boolean = false;
 	private showDeleteModal: boolean = false;
 	private menu: boolean = false;
-	private date = new Date().toISOString().substr(0, 10);
+	private bannedUntil = new Date().toISOString().substr(0, 10);
 	private noteToEditModel: NotesEntity | undefined = {
 		authorId: 0,
 		authorName: '',
@@ -349,9 +354,20 @@ export default class PlayerProfile extends Vue {
 	}
 
 	private getColor(type: string) {
-		if (type == 'Info') return 'white';
-		else if (type == 'Ban') return 'red';
-		else return 'orange';
+		switch (type) {
+			case 'Warning':
+				return 'orange';
+			case 'Ban':
+				return 'red';
+			case 'Info':
+				return 'white';
+			case 'Whitelist added':
+				return 'green';
+			case 'Whitelist removed':
+				return 'yellow';
+			default:
+				return 'orange';
+		}
 	}
 
 	private updateWhitelist(playerId: number, whitelistId: number, enabled: boolean) {
@@ -386,6 +402,12 @@ export default class PlayerProfile extends Vue {
 	private addNote() {
 		this.addModal = false;
 		this.formModel.playerId = this.playerId;
+		if (this.formModel.type == 'Ban') {
+			banPlayer(this.playerId, { bannedUntil: new Date(this.bannedUntil).toISOString() }).then(() => {
+				this.getUserDetails();
+				this.bannedUntil = new Date().toISOString().substr(0, 10);
+			});
+		}
 		addPlayerNote(this.formModel).then((response: boolean) => {
 			if (response) {
 				this.getUserNotes();
@@ -471,4 +493,5 @@ export default class PlayerProfile extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+</style>

@@ -7,6 +7,8 @@ export interface GadgetUser {
 }
 
 export interface Player {
+	isBanned: boolean;
+	bannedUntil: string;
 	id: number;
 	name: string;
 	uid: string;
@@ -28,6 +30,12 @@ export interface NotesEntity {
 	isModified: boolean;
 	lastTimeModified?: null;
 }
+
+export interface LatestNotes {
+	totalNoteCount: number;
+	notes?: (NotesEntity)[] | null;
+}
+
 
 export interface PlayerStats {
 	id: number;
@@ -62,14 +70,6 @@ export interface NoteAddUpdate {
 	type: string;
 }
 
-export interface NotesLatest {
-	id: number;
-	playerName: string;
-	note: string;
-	timeWritten: string;
-	author: string;
-	type: string;
-}
 
 export interface SquadI {
 	id: number;
@@ -148,4 +148,8 @@ export interface SquadUpdate {
 
 export interface PlayerUid {
 	playerUid: string;
+}
+
+export interface BannedUntil {
+	bannedUntil: string;
 }

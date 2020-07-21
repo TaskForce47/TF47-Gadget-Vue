@@ -113,7 +113,7 @@
 				</v-main>
 
 				<v-footer app color="transparent elevation-0" absolute>
-					<v-tooltip bottom>
+					<v-tooltip top>
 						<template v-slot:activator="{ on }">
 							<v-checkbox
 								class="mt-5 mr-2 ml-5"
@@ -127,6 +127,10 @@
 						<span>Toggle Dark/Light</span>
 					</v-tooltip>
 					<notifications></notifications>
+					<v-btn class="ml-2" outlined text>
+						<v-icon>mdi-bug</v-icon>
+						Report
+					</v-btn>
 					<v-col class="text-right">
 						&copy; 2020 Task Force 47
 					</v-col>

@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { NotesLatest } from '@/services/utils/models';
+import { LatestNotes, NotesEntity } from '@/services/utils/models';
 import { getLatestNotes } from '@/services/playerNotes';
 @Component
 export default class Logs extends Vue {
@@ -58,20 +58,31 @@ export default class Logs extends Vue {
 		{ text: 'Type', value: 'type' },
 		{ text: '', value: 'data-table-expand' },
 	];
-	private notes: Array<NotesLatest> | Array<undefined> = [];
+	private notes: NotesEntity[] | null | undefined = [];
 	mounted() {
 		this.getLatestNote();
 	}
 
 	private getColor(type: string) {
-		if (type == 'Info') return 'white';
-		else if (type == 'Ban') return 'red';
-		else return 'orange';
+		switch (type) {
+			case 'Warning':
+				return 'orange';
+			case 'Ban':
+				return 'red';
+			case 'Info':
+				return 'white';
+			case 'Whitelist added':
+				return 'green';
+			case 'Whitelist removed':
+				return 'yellow';
+			default:
+				return 'orange';
+		}
 	}
 
 	private getLatestNote() {
 		this.loading = true;
-		getLatestNotes(this.currentPage).then((res: any) => {
+		getLatestNotes(this.currentPage).then((res: LatestNotes) => {
 			this.notes = res.notes;
 			this.totalNotes = res.totalNoteCount;
 			this.loading = false;

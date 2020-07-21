@@ -7,8 +7,8 @@
 				</v-btn>
 			</template>
 			<div class="notifications">
-				<div class="d-flex mx-4">
-					<h2>Notifications</h2>
+				<div class="d-flex ml-4">
+					<h2>Notifications <span v-if="notifications.length">({{notifications.length}})</span></h2>
 					<v-btn icon class="ml-auto" @click="clearNotifications">
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
@@ -23,7 +23,9 @@
 								<v-icon color="error" v-if="item.type === 'error'">mdi-close-circle-outline</v-icon>
 								<div class="d-flex flex-column ml-2">
 									<span>{{ item.text }}</span>
-									<span class="subtitle-1 font-weight-thin">{{ new Date(item.timestamp).toLocaleString() }}</span>
+									<span class="subtitle-1 font-weight-thin">{{
+										new Date(item.timestamp).toLocaleString()
+									}}</span>
 								</div>
 							</div>
 						</template>
