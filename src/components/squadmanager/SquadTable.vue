@@ -20,8 +20,11 @@
 				:headers="headers"
 				:items="squads"
 				:search="search"
-				:items-per-page.sync="numItems"
+				:items-per-page="numItems"
 				:loading="loading"
+				:footer-props="{
+					'items-per-page-options': $tstore.state.globalRowsPerTable,
+				}"
 			>
 				<template v-slot:item.actions="{ item }">
 					<v-icon small class="mr-2" @click="openSquad(item)">
@@ -63,17 +66,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { createSquad, getSquads } from '@/services/squad';
 import Snackbar from '@/components/snackbar/snackbar.vue';
 import { SquadI } from '@/services/utils/models';
 @Component({
 	components: { Snackbar },
 })
-export default class Squadmanager extends Vue {
+export default class SquadTable extends Vue {
 	constructor() {
 		super();
-		this.numItems = Number(Squadmanager.getItemsPerPage);
+		this.numItems = Number(this.getItemsPerPage);
 	}
 	private text = '';
 	private color = '';
@@ -111,16 +114,9 @@ export default class Squadmanager extends Vue {
 	created() {
 		this.refreshSquads();
 	}
-	@Watch('numItems')
-	onPropertyChanged(value: number) {
-		if (value) {
-			localStorage.setItem('itemsPerPageSquadmanager', value.toString());
-		}
-	}
-	private static get getItemsPerPage() {
-		return localStorage.getItem('itemsPerPageSquadmanager') !== null
-			? localStorage.getItem('itemsPerPageSquadmanager')
-			: '10';
+
+	private get getItemsPerPage() {
+		return localStorage.getItem('defaultRowsPerPage') !== null ? localStorage.getItem('defaultRowsPerPage') : '10';
 	}
 
 	private refreshSquads() {

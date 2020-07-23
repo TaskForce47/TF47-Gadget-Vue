@@ -17,7 +17,13 @@
 							</template>
 						</v-img>
 						<div class="ml-4" v-if="userDetails">
-							<h1>{{ this.userDetails.name }}</h1>
+							<div class="d-flex">
+								<h1>{{ this.userDetails.name }}</h1>
+								<span class="red--text align-self-center ml-2" v-if="userDetails.bannedUntil !== null">
+									Banned until: {{ new Date(userDetails.bannedUntil).toDateString() }}
+								</span>
+							</div>
+
 							<h3 style="color: grey;" class="mb-2">
 								{{ userDetails.uid }}
 								<span v-if="userDetails.uid == null" style="color: red">not set</span>
@@ -32,14 +38,11 @@
 								</v-chip>
 							</template>
 						</div>
-						<div class="ml-auto d-flex flex-column">
+						<div class="ml-auto">
 							<v-btn class="mr-4" outlined disabled>
 								<v-icon>mdi-chart-line-variant</v-icon>
 								Stats
 							</v-btn>
-							<p class="red--text" v-if="userDetails.bannedUntil !== null">
-								Banned until: {{ new Date(userDetails.bannedUntil).toLocaleString() }}
-							</p>
 						</div>
 					</div>
 					<v-card class="mt-8 mr-4" flat>
@@ -55,7 +58,11 @@
 								item-key="nodeId"
 								:sort-by="['timeWritten']"
 								:sort-desc="['timeWritten']"
+								:items-per-page="numItems"
 								:single-expand="true"
+								:footer-props="{
+									'items-per-page-options': $tstore.state.globalRowsPerTable,
+								}"
 								show-expand
 							>
 								<template v-slot:item.timeWritten="{ item }">
@@ -64,7 +71,7 @@
 								<template v-slot:expanded-item="{ headers, item }">
 									<td :colspan="headers.length">
 										<div class="d-flex ml-3">
-											<div style="width: 95%">
+											<div style="width: 98%">
 												{{ item.note }}
 											</div>
 											<div class="d-flex">
@@ -79,9 +86,7 @@
 									</td>
 								</template>
 								<template v-slot:item.type="{ item }">
-									<v-chip style="color: black" :color="getColor(item.type)" dark>{{
-										item.type
-									}}</v-chip>
+									<v-chip style="color: black" :color="color(item.type)" dark>{{ item.type }}</v-chip>
 								</template>
 							</v-data-table>
 						</v-card-text>
@@ -239,6 +244,7 @@ import {
 import { banPlayer, getPlayerDetails, getPlayerNotes } from '@/services/player';
 import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
 import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
+import { getColor } from '@/services/utils/color';
 @Component
 export default class PlayerProfile extends Vue {
 	private userDetails: Player | null = null;
@@ -256,6 +262,7 @@ export default class PlayerProfile extends Vue {
 	private showEditModal: boolean = false;
 	private showDeleteModal: boolean = false;
 	private menu: boolean = false;
+	private numItems: number | null;
 	private bannedUntil = new Date().toISOString().substr(0, 10);
 	private noteToEditModel: NotesEntity | undefined = {
 		authorId: 0,
@@ -293,7 +300,13 @@ export default class PlayerProfile extends Vue {
 		super();
 		this.ready = false;
 		this.playerId = 0;
+		this.numItems = Number(this.getItemsPerPage);
 	}
+
+	private get getItemsPerPage() {
+		return localStorage.getItem('defaultRowsPerPage') !== null ? localStorage.getItem('defaultRowsPerPage') : '10';
+	}
+
 	created() {
 		this.playerId = Number(this.$route.params.id);
 		this.getUserDetails();
@@ -326,6 +339,9 @@ export default class PlayerProfile extends Vue {
 			this.show = index;
 		}
 	}
+	private color(type: string) {
+		return getColor(type);
+	}
 
 	private calcCols() {
 		if (document.documentElement.clientWidth - 124 < 1600) {
@@ -350,23 +366,6 @@ export default class PlayerProfile extends Vue {
 			getPlayerWhitelist(this.playerId).then((response: Array<WhitelistPlayer>) => {
 				this.whitelists = response[0].whitelists;
 			});
-		}
-	}
-
-	private getColor(type: string) {
-		switch (type) {
-			case 'Warning':
-				return 'orange';
-			case 'Ban':
-				return 'red';
-			case 'Info':
-				return 'white';
-			case 'Whitelist added':
-				return 'green';
-			case 'Whitelist removed':
-				return 'yellow';
-			default:
-				return 'orange';
 		}
 	}
 
@@ -493,5 +492,4 @@ export default class PlayerProfile extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

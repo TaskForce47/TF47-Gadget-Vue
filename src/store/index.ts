@@ -6,12 +6,14 @@ Vue.use(Vuex);
 export interface RootState {
 	snackbar: { showing: boolean; text: string; type: string; timeout: string, timestamp: number };
 	auth: { loggedIn: boolean; roles: Array<string> };
+	globalRowsPerTable: Array<number>
 }
 
 export default new Vuex.Store<RootState>({
 	state: {
 		snackbar: { showing: false, text: '', type: 'success', timeout: '5000', timestamp: Date.now() },
 		auth: { loggedIn: false, roles: [] },
+		globalRowsPerTable: [10, 15, 20, 25, 30, 35, 40, 45, 50]
 	},
 	mutations: {
 		SET_SNACKBAR(state, snackbar) {

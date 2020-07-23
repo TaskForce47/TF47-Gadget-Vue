@@ -153,3 +153,36 @@ export interface PlayerUid {
 export interface BannedUntil {
 	bannedUntil: string;
 }
+
+export interface ChatLatest {
+	totalChatCount: number;
+	chats?: (ChatsEntity)[] | null;
+}
+export interface ChatsEntity {
+	id: number;
+	channel: string;
+	message: string;
+	timeSend: string;
+	playerId: number;
+	playerName: string;
+	sessionId: number;
+	missionId: number;
+	missionName: string;
+	missionType: string;
+}
+
+export interface TicketsLatest {
+	totalTicketCount: number;
+	ticketLog?: (TicketLogEntity)[] | null;
+}
+export interface TicketLogEntity {
+	id: number;
+	ticketChange: number;
+	ticketNow: number;
+	message: string;
+	ticketChangeTime: string;
+	sessionId: number;
+	missionId: number;
+	missionName: string;
+	missionType: string;
+}

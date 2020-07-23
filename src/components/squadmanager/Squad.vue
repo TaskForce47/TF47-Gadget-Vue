@@ -46,7 +46,7 @@
 							</v-row>
 						</template>
 					</v-img>
-					<div class="ml-4">
+					<div class="ml-4 mt-2">
 						<div class="d-flex">
 							<h1>{{ squad.squadName }}</h1>
 							<h1 class="ml-2">[{{ squad.squadNick }}]</h1>
@@ -70,10 +70,10 @@
 							:items="squad.squadUsers"
 							:search="search"
 							:items-per-page.sync="numItems"
-							:loading="!ready"
+							:loading="!ready || loading"
 							:footer-props="{
-					'items-per-page-options': [15, 20],
-				}"
+								'items-per-page-options': $tstore.state.globalRowsPerTable,
+							}"
 						>
 							<template v-slot:item.actions="{ item }">
 								<v-icon small class="mr-2" @click="openEditSquadMemberModal(item)">
@@ -278,9 +278,7 @@ export default class Squad extends Vue {
 		{ text: 'Actions', value: 'actions', align: 'center', sortable: true },
 	];
 	private rules = {
-		ruleSquadNick: [
-			(value: string) => !!value || 'Required.'
-		],
+		ruleSquadNick: [(value: string) => !!value || 'Required.'],
 		ruleSquadName: [(value: string) => !!value || 'Required.'],
 		ruleSquadEmail: [
 			(value: string) => !!value || 'Required.',
@@ -289,7 +287,7 @@ export default class Squad extends Vue {
 		ruleSquadWeb: [(value: string) => !!value || 'Required.'],
 		ruleSquadTitle: [(value: string) => !!value || 'Required.'],
 	};
-	private numItems = 5;
+	private numItems: number|null;
 	private search = '';
 	private squadId = 0;
 	private squadMember: Array<number> = [];
@@ -299,14 +297,22 @@ export default class Squad extends Vue {
 	private squadMemberModel = { gadgetUserId: 0, email: '', remark: '' };
 	private editSquadMemberModal = false;
 	private ready: boolean = false;
+	private loading: boolean = false;
 	private uploadSquadPictureModal: boolean = false;
 	private uploading = false;
 	private avatar: File = new File([], 'yos');
+	constructor() {
+		super();
+		this.numItems = Number(this.getItemsPerPage);
+	}
 	mounted() {
 		this.squadId = Number(this.$route.params.id);
+		this.ready = false;
 		this.getSquad();
 	}
-
+	private get getItemsPerPage() {
+		return localStorage.getItem('defaultRowsPerPage') !== null ? localStorage.getItem('defaultRowsPerPage') : '10';
+	}
 
 	private deleteSquad() {
 		deleteSquad(this.squadId).then(() => {
@@ -346,7 +352,7 @@ export default class Squad extends Vue {
 	}
 
 	private getSquad() {
-		this.ready = false;
+		this.loading = true;
 		getSquad(this.squadId).then(response => {
 			this.squad = response;
 			this.squadModel = {
@@ -359,6 +365,7 @@ export default class Squad extends Vue {
 			};
 			this.squadImg = `https://api.taskforce47.com/squadxml/${response.squadNick}/logo.png`;
 			this.ready = true;
+			this.loading = false;
 			if (this.squad && this.squad.squadUsers) {
 				this.squad.squadUsers.forEach(squadMember => {
 					if (squadMember) {

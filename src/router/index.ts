@@ -62,13 +62,19 @@ const routes: Array<RouteConfig> = [
 			},
 			{
 				path: 'squadmanager',
-				name: 'Squadmanager',
-				component: () => import('../views/Squadmanager.vue'),
-			},
-			{
-				path: 'squadmanager/:id',
-				name: 'Squad',
-				component: () => import('../views/Squad.vue'),
+				component: () => import('../views/SquadManager.vue'),
+				children: [
+					{
+						path: '',
+						name: 'SquadTable',
+						component: () => import('../components/squadmanager/SquadTable.vue'),
+					},
+					{
+						path: ':id',
+						name: 'Squad',
+						component: () => import('../components/squadmanager/Squad.vue'),
+					},
+				]
 			},
 			{
 				path: 'logs',
