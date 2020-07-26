@@ -11,9 +11,11 @@ module.exports = {
     "@vue/prettier/@typescript-eslint"
   ],
   parserOptions: {
+    allowSyntheticDefaultImports: true,
     ecmaVersion: 2020
   },
   rules: {
+    "@typescript-eslint/no-inferrable-types": "off",
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
   }
