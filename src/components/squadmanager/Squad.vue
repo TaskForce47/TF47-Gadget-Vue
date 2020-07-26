@@ -42,7 +42,13 @@
 									indeterminate
 									color="grey lighten-5"
 								></v-progress-circular>
-								<span v-if="ready && squadImg === ''">No Image</span>
+								<div
+									style="height: 128px; width: 128px"
+									class="d-flex justify-center"
+									v-if="ready && squadImg === ''"
+								>
+									<span class="align-self-center">No Image</span>
+								</div>
 							</v-row>
 						</template>
 					</v-img>
@@ -268,7 +274,6 @@ export default class Squad extends Vue {
 			align: 'center',
 			sortable: true,
 		},
-		{ text: 'ICQ', value: 'userSquadIcq', align: 'center', sortable: true },
 		{
 			text: 'Remark',
 			value: 'userSquadRemark',
@@ -287,7 +292,7 @@ export default class Squad extends Vue {
 		ruleSquadWeb: [(value: string) => !!value || 'Required.'],
 		ruleSquadTitle: [(value: string) => !!value || 'Required.'],
 	};
-	private numItems: number|null;
+	private numItems: number | null;
 	private search = '';
 	private squadId = 0;
 	private squadMember: Array<number> = [];

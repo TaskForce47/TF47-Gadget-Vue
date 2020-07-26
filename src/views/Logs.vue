@@ -1,22 +1,20 @@
 <template>
 	<v-card>
 		<v-card-title>Logs</v-card-title>
-		<v-card-text>
-			<v-tabs centered color="info">
-				<v-tab>Chat</v-tab>
-				<v-tab>Ticket</v-tab>
-				<v-tab>Gadget</v-tab>
-				<v-tab-item>
-					<ChatLogTable></ChatLogTable>
-				</v-tab-item>
-				<v-tab-item>
-					<TicketLogTable></TicketLogTable>
-				</v-tab-item>
-				<v-tab-item>
-					<GadgetLogTable></GadgetLogTable>
-				</v-tab-item>
-			</v-tabs>
-		</v-card-text>
+		<v-tabs centered color="info">
+			<v-tab>Chat</v-tab>
+			<v-tab>Ticket</v-tab>
+			<v-tab>Gadget</v-tab>
+			<v-tab-item>
+				<ChatLogTable></ChatLogTable>
+			</v-tab-item>
+			<v-tab-item>
+				<TicketLogTable></TicketLogTable>
+			</v-tab-item>
+			<v-tab-item>
+				<GadgetLogTable></GadgetLogTable>
+			</v-tab-item>
+		</v-tabs>
 	</v-card>
 </template>
 

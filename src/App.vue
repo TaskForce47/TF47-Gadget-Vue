@@ -25,33 +25,6 @@
 						</template>
 						<span>Dashboard</span>
 					</v-tooltip>
-					<!--<v-menu open-on-hover offset-y>
-						<template v-slot:activator="{ on }">
-							<v-btn color="info" text dark v-on="on">
-								Statistics
-							</v-btn>
-						</template>
-						<v-list dense>
-							<v-list-item-group>
-								<v-list-item to="/statistics/members">
-									<v-list-item-icon>
-										<v-icon>mdi-account-group</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Members</v-list-item-title>
-									</v-list-item-content>
-								</v-list-item>
-								<v-list-item to="/statistics/events">
-									<v-list-item-icon>
-										<v-icon>mdi-calendar-month</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Events</v-list-item-title>
-									</v-list-item-content>
-								</v-list-item>
-							</v-list-item-group>
-						</v-list>
-					</v-menu>-->
 					<v-menu open-on-hover offset-y v-if="roles.includes('Admin') || roles.includes('Moderator')">
 						<template v-slot:activator="{ on }">
 							<v-btn color="info" text dark v-on="on">
@@ -112,7 +85,7 @@
 					</v-snackbar>
 				</v-main>
 
-				<v-footer app color="transparent elevation-0" absolute>
+				<v-footer color="transparent elevation-0" app absolute>
 					<v-tooltip top>
 						<template v-slot:activator="{ on }">
 							<v-checkbox
@@ -197,5 +170,9 @@ export default class App extends Vue {
 html {
 	background-color: #2c3139;
 	font-family: 'Oswald', sans-serif;
+}
+.v-footer {
+	padding-bottom: 0px !important;
+	margin-top: 25px !important;
 }
 </style>

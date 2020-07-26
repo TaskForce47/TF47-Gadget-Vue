@@ -186,3 +186,22 @@ export interface TicketLogEntity {
 	missionName: string;
 	missionType: string;
 }
+
+export interface GetSquad {
+	squadId: number;
+	squadNick: string;
+	squadTitle: string;
+	squadEmail: string;
+	squadWeb: string;
+	squadHasPicture: boolean;
+	remark: string;
+	email: string;
+}
+
+export interface WhitelistSelf {
+	whitelistingId: number;
+	playerId: number;
+	playerName: string;
+	id: number;
+	description: string;
+}

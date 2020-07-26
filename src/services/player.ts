@@ -24,3 +24,7 @@ export async function getPlayerStats(playerId: number): Promise<PlayerStats> {
 export async function banPlayer(playerId: number, bannedUntilObj: BannedUntil): Promise<boolean> {
 	return await fetchJSON(`player/${playerId}/ban`, { method: 'POST', body: JSON.stringify(bannedUntilObj) }, true);
 }
+
+export async function unbanPlayer(playerId: number): Promise<boolean> {
+	return await fetchJSON(`player/${playerId}/pardon`, { method: 'POST' }, true);
+}

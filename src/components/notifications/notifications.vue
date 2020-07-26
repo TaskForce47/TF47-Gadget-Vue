@@ -6,9 +6,11 @@
 					<v-icon>mdi-bell</v-icon>
 				</v-btn>
 			</template>
-			<div class="notifications">
+			<div class="notifications" :style="{ background: $vuetify.theme.themes[theme].backgroundTop }">
 				<div class="d-flex ml-4">
-					<h2>Notifications <span v-if="notifications.length">({{notifications.length}})</span></h2>
+					<h2>
+						Notifications <span v-if="notifications.length">({{ notifications.length }})</span>
+					</h2>
 					<v-btn icon class="ml-auto" @click="clearNotifications">
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
@@ -49,23 +51,27 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class Notifications extends Vue {
 	private notifications: any = [];
-	mounted(){
+	mounted() {
 		this.getNotifications();
 	}
 
 	private getNotifications() {
 		const storedNotifications = localStorage.getItem('notifications');
-		if(storedNotifications){
+		if (storedNotifications) {
 			this.notifications = JSON.parse(storedNotifications);
 			this.notifications.reverse();
-		}else{
+		} else {
 			this.notifications = [];
 		}
 	}
 
-	private clearNotifications(){
+	private clearNotifications() {
 		localStorage.removeItem('notifications');
 		this.getNotifications();
+	}
+
+	public get theme() {
+		return this.$vuetify.theme.dark ? 'dark' : 'light';
 	}
 }
 </script>
@@ -74,6 +80,5 @@ export default class Notifications extends Vue {
 .notifications {
 	min-height: 287px;
 	min-width: 400px;
-	background-color: #131416;
 }
 </style>

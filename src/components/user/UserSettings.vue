@@ -103,7 +103,7 @@ export default class UserSettings extends Vue {
 .user-settings {
 	&__form {
 		.v-input {
-			width: 75%;
+			width: 90%;
 		}
 	}
 }

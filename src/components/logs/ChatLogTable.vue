@@ -8,7 +8,7 @@
 		:server-items-length="totalNotes"
 		:loading="loading"
 		:page.sync="currentPage"
-		v-on:update:page="getLatestNote()"
+		v-on:update:page="getLatestChat()"
 		:footer-props="{
 			'items-per-page-options': [20],
 		}"
@@ -22,7 +22,7 @@
 		<template v-slot:top>
 			<div class="d-flex">
 				<v-spacer></v-spacer>
-				<v-btn @click="getLatestChat()" style="margin-left: 1rem" :disabled="loading">
+				<v-btn @click="getLatestChat()" style="margin-right: 1rem" :disabled="loading">
 					<v-icon>mdi-autorenew</v-icon>
 				</v-btn>
 			</div>

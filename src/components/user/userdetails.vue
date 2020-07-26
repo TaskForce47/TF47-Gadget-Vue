@@ -34,8 +34,22 @@
 								</template>
 							</div>
 						</div>
+						<v-card flat>
+							<v-card-title>Your Whitelist</v-card-title>
+							<v-card-text class="d-flex justify-space-between text-no-wrap flex-wrap" v-if="whitelists">
+								<v-checkbox
+									v-for="whitelist of whitelists"
+									color="accent"
+									:label="whitelist.description"
+									:key="whitelist.id"
+									input-value="true"
+									hide-details
+									readonly
+								></v-checkbox>
+							</v-card-text>
+						</v-card>
 					</v-col>
-					<v-col :cols="whitelistCols">
+					<v-col :cols="settingCols">
 						<v-card flat>
 							<v-card-title>Settings</v-card-title>
 							<v-card-text class="d-flex flex-column justify-space-between">
@@ -45,6 +59,7 @@
 					</v-col>
 				</v-row>
 			</v-card>
+			<MySquads class="mt-4"></MySquads>
 		</template>
 		<v-progress-circular v-if="!ready" indeterminate color="grey lighten-5"></v-progress-circular>
 	</div>
@@ -52,34 +67,42 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { IUserDetails } from '@/services/utils/models';
+import { IUserDetails, WhitelistSelf } from '@/services/utils/models';
 
-import { getUserDetails } from '@/services/user';
+import { getUserDetails, getWhitelist } from '@/services/user';
 import UserSettings from '@/components/user/UserSettings.vue';
+import MySquads from '@/components/user/MySquads.vue';
 @Component({
-	components: { UserSettings },
+	components: { UserSettings, MySquads },
 })
 export default class Userdetails extends Vue {
 	private userDetails: IUserDetails | null = null;
 	private roles: string[] | null | undefined = [];
-	private userImg: string | null = null;
+	private userImg: string | null = '';
 	private ready: boolean = false;
-	private whitelistCols = 4;
-	private profileCols = 8;
-
+	private settingCols = 5;
+	private profileCols = 7;
+	private whitelists: Array<WhitelistSelf> = [];
+	constructor() {
+		super();
+		window.addEventListener('resize', () => {
+			this.calcCols();
+		});
+	}
 	created() {
 		this.getUserDetails();
 		this.roles = this.userDetails?.roles;
 		this.calcCols();
+		this.getWhitelist();
 	}
 	@Watch('userDetails')
 	onPropertyChanged(value: IUserDetails) {
-		if (value) {
+		if (value && value.avatar) {
 			this.userImg = `https://forum.taskforce47.com${this.userDetails?.avatar}`;
 		}
 	}
 
-	private async getUserDetails() {
+	private getUserDetails() {
 		this.ready = false;
 		getUserDetails().then((response: IUserDetails) => {
 			this.userDetails = response;
@@ -89,17 +112,19 @@ export default class Userdetails extends Vue {
 
 	private calcCols() {
 		if (document.documentElement.clientWidth - 124 < 968) {
-			this.whitelistCols = 12;
+			this.settingCols = 12;
 			this.profileCols = 12;
-		} /* else if (document.documentElement.clientWidth - 124 > 1900) {
-			this.whitelistCols = 1;
-			this.profileCols = 11;
-		}*/
+		} else {
+			this.settingCols = 5;
+			this.profileCols = 7;
+		}
+	}
+	private getWhitelist() {
+		getWhitelist().then((response: Array<WhitelistSelf>) => {
+			this.whitelists = response;
+		});
 	}
 }
 </script>
 
-<style scoped>
-div.v-subheader {
-}
-</style>
+<style scoped></style>

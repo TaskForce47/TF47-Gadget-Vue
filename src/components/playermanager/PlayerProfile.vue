@@ -38,7 +38,16 @@
 								</v-chip>
 							</template>
 						</div>
-						<div class="ml-auto">
+						<div class="ml-auto d-flex">
+							<v-btn
+								class="mr-4"
+								outlined
+								color="success"
+								v-if="userDetails.bannedUntil !== null"
+								@click="unbanPlayer()"
+							>
+								Unban
+							</v-btn>
 							<v-btn class="mr-4" outlined disabled>
 								<v-icon>mdi-chart-line-variant</v-icon>
 								Stats
@@ -201,32 +210,19 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<v-dialog v-model="showDeleteModal" max-width="300">
-				<v-card>
-					<v-card-title class="headline">Delete Note</v-card-title>
-
-					<v-card-text>
-						Do you really want to delete this note?
-					</v-card-text>
-
-					<v-card-actions>
-						<v-spacer></v-spacer>
-
-						<v-btn color="blue darken-1" text @click="showDeleteModal = false">
-							Cancel
-						</v-btn>
-
-						<v-btn color="blue darken-1" text @click="deleteNote()">
-							Confirm
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
+			<ConfirmationModal :show-modal="showDeleteModal" v-on:confirm="deleteNote" v-on:close="showDeleteModal = false">
+				<template v-slot:header>
+					Delete Note
+				</template>
+				<template v-slot:text>
+					<p>
+						Do you really want to delete the note ?
+					</p>
+				</template>
+			</ConfirmationModal>
 		</template>
 		<v-progress-circular v-if="!ready" indeterminate color="grey lighten-5"></v-progress-circular>
-		<template v-if="ready && !userDetails">
-			<h1>No player found</h1>
-		</template>
+		<template v-if="ready && !userDetails"> <h1>No player found</h1> </template>
 	</div>
 </template>
 
@@ -241,16 +237,17 @@ import {
 	WhitelistPlayerAdd,
 	WhitelistsEntity,
 } from '@/services/utils/models';
-import { banPlayer, getPlayerDetails, getPlayerNotes } from '@/services/player';
+import { banPlayer, getPlayerDetails, getPlayerNotes, unbanPlayer } from '@/services/player';
 import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
 import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
 import { getColor } from '@/services/utils/color';
-@Component
+import ConfirmationModal from '@/components/shared/ConfirmationModal.vue';
+@Component({
+	components: { ConfirmationModal },
+})
 export default class PlayerProfile extends Vue {
 	private userDetails: Player | null = null;
-	private roles: Array<string> | undefined = [];
 	private userImg = '';
-	private show: number | null = null;
 	private whitelistCols = 2;
 	private profileCols = 10;
 	private playerId: number;
@@ -332,13 +329,6 @@ export default class PlayerProfile extends Vue {
 		}
 	}
 
-	private expand(index: number) {
-		if (this.show === index) {
-			this.show = null;
-		} else {
-			this.show = index;
-		}
-	}
 	private color(type: string) {
 		return getColor(type);
 	}
@@ -395,6 +385,17 @@ export default class PlayerProfile extends Vue {
 	private getUserNotes() {
 		getPlayerNotes(this.playerId).then((response: PlayerNotes) => {
 			this.notes = response.notes;
+		});
+	}
+
+	private unbanPlayer() {
+		unbanPlayer(this.playerId).then((response: boolean) => {
+			this.getUserDetails();
+			this.$tstore.dispatch('setSnackbar', {
+				showing: true,
+				text: 'Successfully unbanned Player',
+				type: 'success',
+			});
 		});
 	}
 

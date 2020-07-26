@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-card class="d-flex">
+		<v-card class="d-flex playermanager">
 			<div>
 				<PlayerManagerTable></PlayerManagerTable>
 			</div>

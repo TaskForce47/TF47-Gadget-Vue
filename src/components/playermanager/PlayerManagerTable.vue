@@ -45,7 +45,7 @@ export default class PlayerManagerTable extends Vue {
 		const searchBar = document.getElementById('search');
 		if (searchBar) {
 			this.height =
-				document.documentElement.clientHeight -
+				document.body.clientHeight -
 				document.getElementsByClassName('v-app-bar')[0].clientHeight -
 				document.getElementsByClassName('v-footer')[0].clientHeight -
 				searchBar.clientHeight -
