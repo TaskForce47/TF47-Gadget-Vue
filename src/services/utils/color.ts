@@ -1,5 +1,5 @@
 export function getColor(type: any) {
-	if(isNaN(type)){
+	if (isNaN(type)) {
 		switch (type) {
 			case 'Warning':
 				return 'orange';
@@ -24,12 +24,11 @@ export function getColor(type: any) {
 			default:
 				return 'orange';
 		}
-	}else{
-		if(type > 0){
+	} else {
+		if (type > 0) {
 			return 'green';
-		}else{
+		} else {
 			return 'red';
 		}
 	}
-
 }

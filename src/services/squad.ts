@@ -22,7 +22,7 @@ export async function updateSquad(squadId: number, squadObj: SquadUpdate | undef
 }
 
 export async function uploadSquadPicture(squadId: number, data: FormData): Promise<boolean> {
-	return await uploadFile(`squad/${squadId}/uploadSquadPicture`, { method: 'POST', body: data, headers: []  }, true);
+	return await uploadFile(`squad/${squadId}/uploadSquadPicture`, { method: 'POST', body: data, headers: [] }, true);
 }
 
 export async function getSquadXML(squadId: number): Promise<SquadXML> {

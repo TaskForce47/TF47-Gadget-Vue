@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<template v-if="ready && userDetails">
-			<v-row no-gutters style="flex-wrap: nowrap;">
-				<v-col :cols="profileCols" class="flex-shrink-1 flex-grow-0">
-					<div class="d-flex">
+			<v-row no-gutters class="flex-wrap">
+				<v-col :cols="profileCols">
+					<div class="d-flex flex-wrap">
 						<v-img :src="userImg" style="max-width: 128px; max-height: 128px">
 							<template v-slot:placeholder>
 								<v-row class="fill-height ma-0" align="center" justify="center">
@@ -38,23 +38,8 @@
 								</v-chip>
 							</template>
 						</div>
-						<div class="ml-auto d-flex">
-							<v-btn
-								class="mr-4"
-								outlined
-								color="success"
-								v-if="userDetails.bannedUntil !== null"
-								@click="unbanPlayer()"
-							>
-								Unban
-							</v-btn>
-							<v-btn class="mr-4" outlined disabled>
-								<v-icon>mdi-chart-line-variant</v-icon>
-								Stats
-							</v-btn>
-						</div>
 					</div>
-					<v-card class="mt-8 mr-4" flat>
+					<v-card class="mt-8" flat v-if="whitelistCols === 2 || whitelistCols === 1">
 						<v-card-title>
 							Notes
 							<v-spacer></v-spacer>
@@ -101,10 +86,13 @@
 						</v-card-text>
 					</v-card>
 				</v-col>
-				<v-col :cols="whitelistCols" class="flex-grow-1 flex-shrink-0">
+				<v-col :cols="whitelistCols">
 					<v-card flat>
 						<v-card-title>Whitelist</v-card-title>
-						<v-card-text class="d-flex flex-column justify-space-between" v-if="whitelists">
+						<v-card-text
+							class="d-flex flex-lg-column justify-space-between flex-wrap flex-lg-nowrap text-no-wrap"
+							v-if="whitelists"
+						>
 							<v-checkbox
 								v-for="whitelist of whitelists"
 								color="accent"
@@ -115,6 +103,54 @@
 								hide-details
 							></v-checkbox>
 						</v-card-text>
+					</v-card>
+				</v-col>
+			</v-row>
+			<v-row no-gutters v-if="whitelistCols === 12">
+				<v-col cols="12">
+					<v-card class="mt-8 mr-4" flat>
+						<v-card-title>
+							Notes
+							<v-spacer></v-spacer>
+							<v-btn style="margin-left: 2rem" @click="addModal = true"><v-icon>mdi-plus</v-icon></v-btn>
+						</v-card-title>
+						<v-data-table
+							:headers="headers"
+							:items="notes"
+							item-key="nodeId"
+							:sort-by="['timeWritten']"
+							:sort-desc="['timeWritten']"
+							:items-per-page="numItems"
+							:single-expand="true"
+							:footer-props="{
+								'items-per-page-options': $tstore.state.globalRowsPerTable,
+							}"
+							show-expand
+						>
+							<template v-slot:item.timeWritten="{ item }">
+								<span>{{ new Date(item.timeWritten).toLocaleString('en-GB') }}</span>
+							</template>
+							<template v-slot:expanded-item="{ headers, item }">
+								<td :colspan="headers.length">
+									<div class="d-flex ml-3">
+										<div style="width: 98%">
+											{{ item.note }}
+										</div>
+										<div class="d-flex">
+											<v-btn color="warning" icon x-small @click="openNoteEditModal(item)">
+												<v-icon>mdi-pencil</v-icon>
+											</v-btn>
+											<v-btn color="error" icon x-small @click="openNoteDeleteModal(item)">
+												<v-icon>mdi-delete</v-icon>
+											</v-btn>
+										</div>
+									</div>
+								</td>
+							</template>
+							<template v-slot:item.type="{ item }">
+								<v-chip style="color: black" :color="color(item.type)" dark>{{ item.type }}</v-chip>
+							</template>
+						</v-data-table>
 					</v-card>
 				</v-col>
 			</v-row>
@@ -210,7 +246,11 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<ConfirmationModal :show-modal="showDeleteModal" v-on:confirm="deleteNote" v-on:close="showDeleteModal = false">
+			<ConfirmationModal
+				:show-modal="showDeleteModal"
+				v-on:confirm="deleteNote"
+				v-on:close="showDeleteModal = false"
+			>
 				<template v-slot:header>
 					Delete Note
 				</template>
@@ -334,10 +374,13 @@ export default class PlayerProfile extends Vue {
 	}
 
 	private calcCols() {
-		if (document.documentElement.clientWidth - 124 < 1600) {
+		if (document.documentElement.clientWidth - 124 < 1100) {
+			this.whitelistCols = 12;
+			this.profileCols = 12;
+		} else if (document.documentElement.clientWidth - 124 < 1900) {
 			this.whitelistCols = 2;
 			this.profileCols = 10;
-		} else if (document.documentElement.clientWidth - 124 > 1900) {
+		} else {
 			this.whitelistCols = 1;
 			this.profileCols = 11;
 		}
@@ -390,12 +433,20 @@ export default class PlayerProfile extends Vue {
 
 	private unbanPlayer() {
 		unbanPlayer(this.playerId).then((response: boolean) => {
-			this.getUserDetails();
-			this.$tstore.dispatch('setSnackbar', {
-				showing: true,
-				text: 'Successfully unbanned Player',
-				type: 'success',
-			});
+			if (response) {
+				this.getUserDetails();
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Successfully unbanned Player',
+					type: 'success',
+				});
+			} else {
+				this.$tstore.dispatch('setSnackbar', {
+					showing: true,
+					text: 'Failed to unban Player',
+					type: 'error',
+				});
+			}
 		});
 	}
 

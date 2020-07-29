@@ -22,7 +22,7 @@ export async function getSquads(): Promise<Array<GetSquad>> {
 }
 
 export async function leaveSquad(squadId: number): Promise<boolean> {
-	return await fetchJSON(`squad/${squadId}/leave`, { method: 'POST'}, true);
+	return await fetchJSON(`squad/${squadId}/leave`, { method: 'POST' }, true);
 }
 
 export async function getWhitelist(): Promise<Array<WhitelistSelf>> {

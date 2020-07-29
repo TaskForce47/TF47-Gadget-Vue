@@ -1,0 +1,47 @@
+{
+	"links": [
+		{
+			"name": "",
+			"tooltip": "Dashboard",
+			"to": "/",
+			"roles": [],
+			"icon": "mdi-home",
+			"sublinks": []
+		},
+		{
+			"name": "Administration",
+			"tooltip": "",
+			"to": "/",
+			"roles": ["Admin", "Moderator"],
+			"icon": "",
+			"sublinks": [
+				{
+					"name": "Playermanager",
+					"icon": "mdi-account-cog",
+					"to": "/administration/playermanager",
+					"roles": []
+				},
+				{
+					"name": "Squadmanager",
+					"icon": "mdi-account-supervisor",
+					"to": "/administration/squadmanager",
+					"roles": []
+				},
+				{
+					"name": "Logs",
+					"icon": "mdi-clipboard-text",
+					"to": "/administration/logs",
+					"roles": []
+				}
+			]
+		},
+		{
+			"name": "",
+			"tooltip": "Profile",
+			"icon": "mdi-account",
+			"sublinks": [],
+			"to": "/user",
+			"roles": []
+		}
+	]
+}

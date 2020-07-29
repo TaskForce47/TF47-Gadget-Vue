@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import store from '../store';
-import {authenticate, getRoles} from "@/services/user";
+import { authenticate, getRoles } from '@/services/user';
 Vue.use(VueRouter);
 
 function beforeRouteEnter(to: any, from: any, next: (s?: string) => void) {
@@ -15,9 +15,8 @@ function beforeRouteEnter(to: any, from: any, next: (s?: string) => void) {
 				store.state.snackbar.text = 'You do not have permission to access this route';
 				next('/');
 			}
-		})
-	})
-
+		});
+	});
 }
 
 const routes: Array<RouteConfig> = [
@@ -74,7 +73,7 @@ const routes: Array<RouteConfig> = [
 						name: 'Squad',
 						component: () => import('../components/squadmanager/Squad.vue'),
 					},
-				]
+				],
 			},
 			{
 				path: 'logs',

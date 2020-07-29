@@ -4,17 +4,20 @@
 			<v-card-title>
 				Squadmanager
 				<v-spacer></v-spacer>
-				<v-text-field
-					v-model="search"
-					append-icon="mdi-magnify"
-					label="Search"
-					single-line
-					hide-details
-				></v-text-field>
-				<v-btn @click="toggleAddDialog()" style="margin-left: 2rem"><v-icon>mdi-plus</v-icon></v-btn>
-				<v-btn @click="refreshSquads()" style="margin-left: 1rem" :disabled="!squads">
-					<v-icon>mdi-autorenew</v-icon>
-				</v-btn>
+				<div class="d-flex">
+					<v-text-field
+							v-model="search"
+							append-icon="mdi-magnify"
+							label="Search"
+							single-line
+							hide-details
+					></v-text-field>
+					<v-btn @click="toggleAddDialog()" style="margin-left: 2rem"><v-icon>mdi-plus</v-icon></v-btn>
+					<v-btn @click="refreshSquads()" style="margin-left: 1rem" :disabled="!squads">
+						<v-icon>mdi-autorenew</v-icon>
+					</v-btn>
+				</div>
+
 			</v-card-title>
 			<v-data-table
 				:headers="headers"

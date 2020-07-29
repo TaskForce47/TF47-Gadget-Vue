@@ -17,60 +17,14 @@
 						<span :style="{ color: $vuetify.theme.themes[theme].gadgetText }">Gadget</span></v-toolbar-title
 					>
 					<v-spacer></v-spacer>
-					<v-tooltip bottom>
-						<template v-slot:activator="{ on }">
-							<v-btn min-width="0" text v-on="on" to="/" class="ml-4">
-								<v-icon>mdi-home</v-icon>
-							</v-btn>
-						</template>
-						<span>Dashboard</span>
-					</v-tooltip>
-					<v-menu open-on-hover offset-y v-if="roles.includes('Admin') || roles.includes('Moderator')">
-						<template v-slot:activator="{ on }">
-							<v-btn color="info" text dark v-on="on">
-								Administration
-							</v-btn>
-						</template>
-						<v-list dense>
-							<v-list-item-group>
-								<v-list-item to="/administration/playermanager">
-									<v-list-item-icon>
-										<v-icon>mdi-account-cog</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Playermanager</v-list-item-title>
-									</v-list-item-content>
-								</v-list-item>
-								<v-list-item to="/administration/squadmanager">
-									<v-list-item-icon>
-										<v-icon>mdi-account-supervisor</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Squadmanager</v-list-item-title>
-									</v-list-item-content>
-								</v-list-item>
-								<v-list-item to="/administration/logs">
-									<v-list-item-icon>
-										<v-icon>mdi-clipboard-text</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title>Logs</v-list-item-title>
-									</v-list-item-content>
-								</v-list-item>
-							</v-list-item-group>
-						</v-list>
-					</v-menu>
-					<v-tooltip bottom>
-						<template v-slot:activator="{ on }">
-							<v-btn min-width="0" text v-on="on" to="/user">
-								<v-icon>mdi-account</v-icon>
-							</v-btn>
-						</template>
-						<span>Profile</span>
-					</v-tooltip>
+					<Navigation></Navigation>
 				</v-app-bar>
 
-				<v-main class="mt-9 px-9" :style="{ background: $vuetify.theme.themes[theme].background }">
+				<v-main
+					class="mt-9 px-9"
+					:style="{ background: $vuetify.theme.themes[theme].background }"
+					style="padding-bottom: 5rem"
+				>
 					<router-view />
 					<v-snackbar
 						v-model="$tstore.state.snackbar.showing"
@@ -100,7 +54,7 @@
 						<span>Toggle Dark/Light</span>
 					</v-tooltip>
 					<notifications></notifications>
-					<v-btn class="ml-2" outlined text>
+					<v-btn class="ml-2" outlined text disabled>
 						<v-icon>mdi-bug</v-icon>
 						Report
 					</v-btn>
@@ -123,8 +77,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import Notifications from '@/components/notifications/notifications.vue';
 import { authenticate, getRoles } from '@/services/user';
+import Navigation from '@/components/shared/Navigation.vue';
+
 @Component({
-	components: { Notifications },
+	components: { Navigation, Notifications },
 })
 export default class App extends Vue {
 	public dark = true;
@@ -173,6 +129,5 @@ html {
 }
 .v-footer {
 	padding-bottom: 0px !important;
-	margin-top: 25px !important;
 }
 </style>

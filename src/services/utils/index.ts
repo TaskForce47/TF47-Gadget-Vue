@@ -13,7 +13,7 @@ export const fetchJSON = async <T>(input: RequestInfo, init: RequestInit = {}, r
 export const uploadFile = async <T>(input: RequestInfo, init: RequestInit = {}, returnBool = false): Promise<T> => {
 	const response = await fetch(`${API_URI}${input}`, {
 		credentials: 'include',
-		...init
+		...init,
 	});
 
 	return returnBool ? response.ok : await response.json();

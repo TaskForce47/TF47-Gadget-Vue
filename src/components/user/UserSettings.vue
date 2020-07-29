@@ -23,7 +23,7 @@
 			></v-text-field>
 			<div class="d-flex">
 				<v-btn
-					class="ml-auto"
+					class="ml-auto mt-2"
 					outlined
 					:color="formValid ? 'buttons' : 'info'"
 					:disabled="!formValid || requestInProgress"

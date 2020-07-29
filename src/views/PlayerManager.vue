@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-card class="d-flex playermanager">
+		<v-card class="d-flex playermanager flex-lg-row flex-column" min-height="750">
 			<div>
 				<PlayerManagerTable></PlayerManagerTable>
 			</div>
