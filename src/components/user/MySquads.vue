@@ -3,12 +3,7 @@
 		<v-card>
 			<v-card-title>Your Squads</v-card-title>
 			<div class="px-4 pb-4">
-				<v-card
-					v-for="squad of squads"
-					v-bind:key="squad.squadId"
-					outlined
-					class="d-flex flex-wrap px-2 mt-4"
-				>
+				<v-card v-for="squad of squads" v-bind:key="squad.squadId" outlined class="d-flex flex-wrap px-2 mt-4">
 					<v-img
 						:src="
 							squad.squadHasPicture === true

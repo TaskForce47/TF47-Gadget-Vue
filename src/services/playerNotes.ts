@@ -5,7 +5,10 @@ export async function addPlayerNote(objPlayerNote: NoteAddUpdate): Promise<boole
 	return await fetchJSON(`playerNotes/addNote`, { method: 'PUT', body: JSON.stringify(objPlayerNote) }, true);
 }
 
-export async function updatePlayerNote(playerNoteId: number|undefined, objPlayerNote: NotesEntity|undefined): Promise<boolean> {
+export async function updatePlayerNote(
+	playerNoteId: number | undefined,
+	objPlayerNote: NotesEntity | undefined
+): Promise<boolean> {
 	return await fetchJSON(
 		`playerNotes/${playerNoteId}/update`,
 		{ method: 'PUT', body: JSON.stringify(objPlayerNote) },
@@ -13,7 +16,7 @@ export async function updatePlayerNote(playerNoteId: number|undefined, objPlayer
 	);
 }
 
-export async function deletePlayerNote(playerNoteId: number|undefined): Promise<boolean> {
+export async function deletePlayerNote(playerNoteId: number | undefined): Promise<boolean> {
 	return await fetchJSON(`playerNotes/${playerNoteId}/delete`, { method: 'DELETE' }, true);
 }
 

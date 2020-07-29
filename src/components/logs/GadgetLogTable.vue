@@ -44,7 +44,7 @@ import { getLatestNotes } from '../../services/playerNotes';
 import { getColor } from '@/services/utils/color';
 @Component
 export default class GadgetLogTable extends Vue {
-	private color(type: string){
+	private color(type: string) {
 		return getColor(type);
 	}
 	private loading: boolean = false;

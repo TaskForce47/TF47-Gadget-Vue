@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-	import {Component, Vue, Watch} from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { getAllPlayers } from '@/services/player';
 import { Player } from '@/services/utils/models';
 @Component

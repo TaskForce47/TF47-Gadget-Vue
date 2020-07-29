@@ -33,9 +33,8 @@ export interface NotesEntity {
 
 export interface LatestNotes {
 	totalNoteCount: number;
-	notes?: (NotesEntity)[] | null;
+	notes?: NotesEntity[] | null;
 }
-
 
 export interface PlayerStats {
 	id: number;
@@ -69,7 +68,6 @@ export interface NoteAddUpdate {
 	playerId: number;
 	type: string;
 }
-
 
 export interface SquadI {
 	id: number;
@@ -156,7 +154,7 @@ export interface BannedUntil {
 
 export interface ChatLatest {
 	totalChatCount: number;
-	chats?: (ChatsEntity)[] | null;
+	chats?: ChatsEntity[] | null;
 }
 export interface ChatsEntity {
 	id: number;
@@ -173,7 +171,7 @@ export interface ChatsEntity {
 
 export interface TicketsLatest {
 	totalTicketCount: number;
-	ticketLog?: (TicketLogEntity)[] | null;
+	ticketLog?: TicketLogEntity[] | null;
 }
 export interface TicketLogEntity {
 	id: number;
@@ -206,7 +204,7 @@ export interface WhitelistSelf {
 	description: string;
 }
 
-declare module "*.json" {
+declare module '*.json' {
 	const value: any;
 	export default value;
 }
