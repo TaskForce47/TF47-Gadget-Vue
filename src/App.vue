@@ -58,9 +58,9 @@
 						<v-icon>mdi-bug</v-icon>
 						Report
 					</v-btn>
-					<v-col class="text-right">
+					<div class="ml-sm-auto text-right">
 						&copy; 2020 Task Force 47
-					</v-col>
+					</div>
 				</v-footer>
 			</v-app>
 		</div>

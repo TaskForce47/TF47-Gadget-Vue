@@ -48,9 +48,10 @@ export default class PlayerManagerTable extends Vue {
 	}
 	private getDimensions() {
 		const searchBar = document.getElementById('search');
-		if (document.body.clientWidth < 1264) {
+		const playerManager = document.getElementsByClassName('playermanager')[0].clientWidth;
+		if (document.body.clientWidth < 1264 && playerManager) {
 			this.height = 350;
-			this.width = document.getElementsByClassName('playermanager')[0].clientWidth;
+			this.width = playerManager;
 		} else {
 			if (searchBar) {
 				this.height =

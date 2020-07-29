@@ -13,7 +13,9 @@ module.exports = {
 	},
 	pwa: {
 		name: 'Task Force 47 Gadget',
+		description: 'Task Force 47 Statistics an Administration Tool',
 		themeColor: '#2C3139',
+		background_color: '#2C3139',
 		manifestOptions: {
 			short_name: 'TF47 Gadget'
 		},
