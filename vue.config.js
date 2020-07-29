@@ -11,4 +11,15 @@ module.exports = {
 		},
 		public: 'https://gadget.taskforce47.com:8080',
 	},
+	pwa: {
+		name: 'Task Force 47 Gadget',
+		themeColor: '#2C3139',
+		manifestOptions: {
+			short_name: 'TF47 Gadget'
+		},
+		workboxPluginMode: 'InjectManifest',
+		workboxOptions: {
+			swSrc: 'src/service-worker.js'
+		}
+	}
 };

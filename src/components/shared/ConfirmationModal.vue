@@ -23,13 +23,13 @@
 </template>
 
 <script lang="ts">
-	import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 @Component
 export default class ConfirmationModal extends Vue {
 	@Prop({ default: false, type: Boolean }) private showModal: boolean = false;
 	@Watch('showModal')
-	onValueChange(value: boolean){
-		if(!value){
+	onValueChange(value: boolean) {
+		if (!value) {
 			this.$emit('close');
 		}
 	}

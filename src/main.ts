@@ -4,6 +4,7 @@ import router from './router';
 import store, { RootState } from './store';
 import vuetify from '@/plugins/vuetify';
 import { Store } from 'vuex';
+import './registerServiceWorker';
 Object.defineProperty(Vue.prototype, '$tstore', {
 	get: function() {
 		return this.$store as Store<RootState>;
