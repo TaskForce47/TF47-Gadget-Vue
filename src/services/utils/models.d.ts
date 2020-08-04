@@ -208,3 +208,35 @@ declare module '*.json' {
 	const value: any;
 	export default value;
 }
+
+export interface AvailableWhitelist {
+	id: number;
+	description: string;
+}
+
+export interface WhitelistAllPlayers {
+	id: number;
+	playerName: string;
+	playerUid: string;
+	whitelists?: (WhitelistsEntity)[] | null;
+}
+
+export interface WhitelistsEntity {
+	id: number;
+	whitelistName: string;
+	enabled: boolean;
+}
+
+export interface PlayerByWhitelist {
+	totalUsersWithWhitelist?: number;
+	usersByWhitelist?: (UsersByWhitelistEntity)[] | null;
+}
+
+export interface UsersByWhitelistEntity {
+	id: number;
+	playerId: number;
+	playerName: string;
+	whitelistId: number;
+	description: string;
+}
+

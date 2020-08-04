@@ -5,6 +5,6 @@ export async function getLatestTicketChanges(page: number): Promise<TicketsLates
 	return await fetchJSON(`stats/TicketLog/${page}`, { method: 'GET' });
 }
 
-export async function getLatestChat(page: number): Promise<ChatLatest> {
-	return await fetchJSON(`stats/chat/${page}`, { method: 'GET' });
+export async function getLatestChat(page: number, playerName: string, channel: string, rows: number): Promise<ChatLatest> {
+	return await fetchJSON(`stats/chat/${page}?channel=${channel}&playerName=${playerName}&rows=${rows}`, {method: 'GET'});
 }
