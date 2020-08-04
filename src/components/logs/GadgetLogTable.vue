@@ -28,11 +28,11 @@
 		</template>
 		<template v-slot:top>
 			<div class="d-flex">
-				<v-spacer></v-spacer>
-				<v-btn @click="getLatestNote()" style="margin-right: 1rem" :disabled="loading">
-					<v-icon>mdi-autorenew</v-icon>
-				</v-btn>
-			</div>
+        <v-spacer></v-spacer>
+        <v-btn :disabled="loading" @click="getLatestNote()" class="mr-1">
+          <v-icon>mdi-autorenew</v-icon>
+        </v-btn>
+      </div>
 		</template>
 	</v-data-table>
 </template>
@@ -52,19 +52,20 @@ export default class GadgetLogTable extends Vue {
 	private totalNotes: number = 0;
 	private headers = [
 		{
-			text: 'Moderator',
-			align: 'start',
-			sortable: false,
-			value: 'author',
-		},
-		{
-			text: 'Player',
-			value: 'playerName',
-		},
-		{ text: 'Date', value: 'timeWritten' },
-		{ text: 'Type', value: 'type' },
-		{ text: '', value: 'data-table-expand' },
-	];
+      text: 'Moderator',
+      align: 'start',
+      sortable: false,
+      value: 'author',
+    },
+    {
+      text: 'Player',
+      value: 'playerName',
+      sortable: false,
+    },
+    {text: 'Date', value: 'timeWritten', sortable: false},
+    {text: 'Type', value: 'type', sortable: false},
+    {text: '', value: 'data-table-expand', sortable: false},
+  ];
 	private notes: NotesEntity[] | null | undefined = [];
 	mounted() {
 		this.getLatestNote();

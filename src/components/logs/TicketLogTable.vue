@@ -21,11 +21,11 @@
 		</template>
 		<template v-slot:top>
 			<div class="d-flex">
-				<v-spacer></v-spacer>
-				<v-btn @click="getLatestTickets()" style="margin-right: 1rem" :disabled="loading">
-					<v-icon>mdi-autorenew</v-icon>
-				</v-btn>
-			</div>
+        <v-spacer></v-spacer>
+        <v-btn :disabled="loading" @click="getLatestTickets()" class="mr-1">
+          <v-icon>mdi-autorenew</v-icon>
+        </v-btn>
+      </div>
 		</template>
 	</v-data-table>
 </template>
@@ -45,12 +45,12 @@ export default class TicketLogTable extends Vue {
 	private currentPage: number = 1;
 	private totalTicketUpdates: number = 0;
 	private headers = [
-		{ text: 'Date', value: 'ticketChangeTime' },
-		{ text: 'Mission', value: 'missionName' },
-		{ text: 'Message', value: 'message' },
-		{ text: 'Current Ticket Count', value: 'ticketNow' },
-		{ text: 'Change', value: 'ticketChange' },
-	];
+    {text: 'Date', value: 'ticketChangeTime', sortable: false},
+    {text: 'Mission', value: 'missionName', sortable: false},
+    {text: 'Message', value: 'message', sortable: false},
+    {text: 'Current Ticket Count', value: 'ticketNow', sortable: false},
+    {text: 'Change', value: 'ticketChange', sortable: false},
+  ];
 	private tickets: TicketLogEntity[] | null | undefined = [];
 	mounted() {
 		this.getLatestTickets();
