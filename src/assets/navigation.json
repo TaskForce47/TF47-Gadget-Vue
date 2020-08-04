@@ -9,10 +9,42 @@
 			"sublinks": []
 		},
 		{
+			"name": "Stats",
+			"tooltip": "",
+			"to": "/",
+			"roles": [
+				"TF47"
+			],
+			"icon": "",
+			"sublinks": [
+				{
+					"name": "Overview",
+					"icon": "mdi-chart-line",
+					"to": "/",
+					"roles": []
+				},
+				{
+					"name": "Members",
+					"icon": "mdi-account-group",
+					"to": "/",
+					"roles": []
+				},
+				{
+					"name": "Medals",
+					"icon": "mdi-medal",
+					"to": "/",
+					"roles": []
+				}
+			]
+		},
+		{
 			"name": "Administration",
 			"tooltip": "",
 			"to": "/",
-			"roles": ["Admin", "Moderator"],
+			"roles": [
+				"Admin",
+				"Moderator"
+			],
 			"icon": "",
 			"sublinks": [
 				{
@@ -28,9 +60,21 @@
 					"roles": []
 				},
 				{
+					"name": "Server Control",
+					"icon": "mdi-server",
+					"to": "/administration/server-control",
+					"roles": []
+				},
+				{
 					"name": "Logs",
 					"icon": "mdi-clipboard-text",
 					"to": "/administration/logs",
+					"roles": []
+				},
+				{
+					"name": "Whitelist",
+					"icon": "mdi-clipboard-list",
+					"to": "/administration/whitelist-overview",
 					"roles": []
 				}
 			]

@@ -43,25 +43,25 @@
 					<v-tooltip top>
 						<template v-slot:activator="{ on }">
 							<v-checkbox
-								class="mt-5 mr-2 ml-5"
-								v-model="$vuetify.theme.dark"
-								on-icon="mdi-white-balance-sunny"
-								off-icon="mdi-weather-night"
-								color="white"
-								v-on="on"
-							></v-checkbox>
-						</template>
-						<span>Toggle Dark/Light</span>
-					</v-tooltip>
-					<notifications></notifications>
-					<v-btn class="ml-2" outlined text disabled>
-						<v-icon>mdi-bug</v-icon>
-						Report
-					</v-btn>
-					<div class="ml-sm-auto text-right">
-						&copy; 2020 Task Force 47
-					</div>
-				</v-footer>
+                  class="mt-5 mr-2 ml-5"
+                  v-model="$vuetify.theme.dark"
+                  on-icon="mdi-white-balance-sunny"
+                  off-icon="mdi-weather-night"
+                  color="white"
+                  v-on="on"
+              ></v-checkbox>
+            </template>
+            <span>Toggle Dark/Light</span>
+          </v-tooltip>
+          <notifications></notifications>
+          <v-btn class="ml-2 d-none d-sm-block" disabled outlined text>
+            <v-icon>mdi-bug</v-icon>
+            Report
+          </v-btn>
+          <div class="ml-sm-auto text-right">
+            &copy; 2020 Task Force 47
+          </div>
+        </v-footer>
 			</v-app>
 		</div>
 		<div

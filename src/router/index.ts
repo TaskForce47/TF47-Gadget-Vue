@@ -80,6 +80,16 @@ const routes: Array<RouteConfig> = [
 				name: 'Logs',
 				component: () => import('../views/Logs.vue'),
 			},
+			{
+				path: 'whitelist-overview',
+				name: 'Whitelist Overview',
+				component: () => import('../views/WhitelistOverview.vue'),
+			},
+			{
+				path: 'server-control',
+				name: 'Server Control',
+				component: () => import('../views/ServerControl.vue'),
+			},
 		],
 	},
 	{
