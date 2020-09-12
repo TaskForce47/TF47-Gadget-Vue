@@ -3,7 +3,7 @@
 		<template v-if="ready && userDetails">
 			<v-row no-gutters class="flex-wrap">
 				<v-col :cols="profileCols">
-					<div class="d-flex flex-wrap">
+					<div class="d-flex flex-column flex-md-row ml-sm-4">
 						<v-img :src="userImg" style="max-width: 128px; max-height: 128px">
 							<template v-slot:placeholder>
 								<v-row class="fill-height ma-0" align="center" justify="center">
@@ -16,27 +16,49 @@
 								</v-row>
 							</template>
 						</v-img>
-						<div class="ml-4" v-if="userDetails">
-							<div class="d-flex">
-								<h1>{{ this.userDetails.name }}</h1>
-								<span class="red--text align-self-center ml-2" v-if="userDetails.bannedUntil !== null">
+						<div class="d-flex flex-wrap flex-fill">
+							<div class="ml-sm-4" v-if="userDetails">
+								<div class="d-flex flex-wrap">
+									<div class="text-sm-h3 text-h4">{{ userDetails.name }}</div>
+									<span class="align-self-center ml-sm-2 grey--text" v-if="userDetails.gadgetUser"
+										>({{ userDetails.gadgetUser.forumName }})</span
+									>
+								</div>
+
+								<h3 class="mb-2">
+									<a
+										style="color: grey;"
+										:href="`https://www.steamcommunity.com/profiles/${this.userDetails.uid}`"
+										target="_blank"
+										>{{ userDetails.uid }}</a
+									>
+
+									<span v-if="userDetails.uid == null" style="color: red">not set</span>
+								</h3>
+								<template v-if="ready && userDetails.gadgetUser">
+									<v-chip
+										v-for="role in userDetails.gadgetUser.roles"
+										v-bind:key="role"
+										style="margin-right: 0.25rem; margin-top: 0.25rem"
+									>
+										{{ role }}
+									</v-chip>
+								</template>
+							</div>
+							<div v-if="playerStats" class="d-flex flex-column ml-md-auto mt-4 ml-4">
+								<span class="red--text" v-if="userDetails.bannedUntil !== null">
 									Banned until: {{ new Date(userDetails.bannedUntil).toDateString() }}
 								</span>
-							</div>
-
-							<h3 style="color: grey;" class="mb-2">
-								{{ userDetails.uid }}
-								<span v-if="userDetails.uid == null" style="color: red">not set</span>
-							</h3>
-							<template v-if="ready && userDetails.gadgetUser">
-								<v-chip
-									v-for="role in userDetails.gadgetUser.roles"
-									v-bind:key="role"
-									style="margin-right: 0.25rem; margin-top: 0.25rem"
+								<span
+									>First Time seen:
+									{{ new Date(playerStats.playerFirstTimeSeen).toLocaleString('en-GB') }}</span
 								>
-									{{ role }}
-								</v-chip>
-							</template>
+								<span
+									>Last Time seen:
+									{{ new Date(playerStats.lastTimeSeen).toLocaleString('en-GB') }}</span
+								>
+								<span>Connections: {{ playerStats.numberConnections }}</span>
+							</div>
 						</div>
 					</div>
 					<v-card class="mt-8" flat v-if="whitelistCols === 2 || whitelistCols === 1">
@@ -68,7 +90,13 @@
 											<div style="width: 98%">
 												{{ item.note }}
 											</div>
-											<div class="d-flex">
+											<div
+												class="d-flex"
+												v-if="
+													$tstore.state.auth.roles.includes('Admin') ||
+														['Ban', 'Warning', 'Info'].includes(item.type)
+												"
+											>
 												<v-btn color="warning" icon x-small @click="openNoteEditModal(item)">
 													<v-icon>mdi-pencil</v-icon>
 												</v-btn>
@@ -87,6 +115,16 @@
 					</v-card>
 				</v-col>
 				<v-col :cols="whitelistCols">
+					<div class="ml-4 d-flex flex-column mt-2 mt-lg-0">
+						<v-btn outlined disabled>
+							Stats
+							<v-icon>mdi-chart-line-variant</v-icon>
+						</v-btn>
+						<v-btn outlined class="mt-2" @click.stop="chatModal = true">
+							Chatlog
+							<v-icon>mdi-chat</v-icon>
+						</v-btn>
+					</div>
 					<v-card flat>
 						<v-card-title>Whitelist</v-card-title>
 						<v-card-text
@@ -136,7 +174,13 @@
 										<div style="width: 98%">
 											{{ item.note }}
 										</div>
-										<div class="d-flex">
+										<div
+											class="d-flex"
+											v-if="
+												$tstore.state.auth.roles.includes('Admin') ||
+													['Ban', 'Warning', 'Info'].includes(item.type)
+											"
+										>
 											<v-btn color="warning" icon x-small @click="openNoteEditModal(item)">
 												<v-icon>mdi-pencil</v-icon>
 											</v-btn>
@@ -260,6 +304,12 @@
 					</p>
 				</template>
 			</ConfirmationModal>
+			<PlayerChatDialog
+				v-if="userDetails && chatModal"
+				:show-modal="chatModal"
+				v-on:close="chatModal = false"
+				:search-player-name="userDetails.name"
+			></PlayerChatDialog>
 		</template>
 		<v-progress-circular v-if="!ready" indeterminate color="grey lighten-5"></v-progress-circular>
 		<template v-if="ready && !userDetails"> <h1>No player found</h1> </template>
@@ -273,6 +323,7 @@ import {
 	NotesEntity,
 	Player,
 	PlayerNotes,
+	PlayerStats,
 	WhitelistPlayer,
 	WhitelistPlayerAdd,
 	WhitelistsEntity,
@@ -282,8 +333,11 @@ import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
 import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
 import { getColor } from '@/services/utils/color';
 import ConfirmationModal from '@/components/shared/ConfirmationModal.vue';
+import StatTables from '@/components/stats/StatTables.vue';
+import { getStatsForPlayer } from '@/services/stats';
+import PlayerChatDialog from '@/components/playermanager/PlayerChatDialog.vue';
 @Component({
-	components: { ConfirmationModal },
+	components: { PlayerChatDialog, StatTables, ConfirmationModal },
 })
 export default class PlayerProfile extends Vue {
 	private userDetails: Player | null = null;
@@ -312,6 +366,7 @@ export default class PlayerProfile extends Vue {
 		type: '',
 	};
 	private noteToDeleteModel: NotesEntity | undefined;
+	private chatModal: boolean = false;
 	private headers = [
 		{
 			text: 'Moderator',
@@ -333,6 +388,7 @@ export default class PlayerProfile extends Vue {
 		playerId: 0,
 	};
 	private types = ['Warning', 'Ban', 'Info'];
+	private playerStats: PlayerStats | null = null;
 	constructor() {
 		super();
 		this.ready = false;
@@ -351,6 +407,7 @@ export default class PlayerProfile extends Vue {
 		window.addEventListener('resize', () => [this.calcCols()]);
 		this.calcCols();
 		this.getUserNotes();
+		this.getStatsForPlayer();
 	}
 	@Watch('$route.params.id')
 	onRouteParamChanged(value: string) {
@@ -360,6 +417,7 @@ export default class PlayerProfile extends Vue {
 		this.userImg = '';
 		this.getPlayerWhitelist();
 		this.getUserNotes();
+		this.getStatsForPlayer();
 	}
 
 	@Watch('userDetails')
@@ -374,10 +432,10 @@ export default class PlayerProfile extends Vue {
 	}
 
 	private calcCols() {
-		if (document.documentElement.clientWidth - 124 < 1100) {
+		if (document.documentElement.clientWidth < 1200) {
 			this.whitelistCols = 12;
 			this.profileCols = 12;
-		} else if (document.documentElement.clientWidth - 124 < 1900) {
+		} else if (document.documentElement.clientWidth < 1900) {
 			this.whitelistCols = 2;
 			this.profileCols = 10;
 		} else {
@@ -539,6 +597,12 @@ export default class PlayerProfile extends Vue {
 					type: 'error',
 				});
 			}
+		});
+	}
+
+	private getStatsForPlayer() {
+		getStatsForPlayer(this.playerId).then((playerStats: PlayerStats) => {
+			this.playerStats = playerStats;
 		});
 	}
 }

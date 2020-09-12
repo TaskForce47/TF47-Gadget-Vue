@@ -13,7 +13,7 @@
 			"tooltip": "",
 			"to": "/",
 			"roles": [
-				"TF47"
+				"fdaes"
 			],
 			"icon": "",
 			"sublinks": [
@@ -36,6 +36,22 @@
 					"roles": []
 				}
 			]
+		},
+		{
+			"name": "Gallery",
+			"tooltip": "Gallery",
+			"to": "/gallery",
+			"roles": ["Admin"],
+			"icon": "mdi-folder-image",
+			"sublinks": []
+		},
+		{
+			"name": "Planning",
+			"tooltip": "Planning",
+			"to": "/planning",
+			"roles": ["Admin"],
+			"icon": "mdi-map-outline",
+			"sublinks": []
 		},
 		{
 			"name": "Administration",
@@ -63,7 +79,7 @@
 					"name": "Server Control",
 					"icon": "mdi-server",
 					"to": "/administration/server-control",
-					"roles": []
+					"roles": ["Admin"]
 				},
 				{
 					"name": "Logs",
@@ -76,6 +92,12 @@
 					"icon": "mdi-clipboard-list",
 					"to": "/administration/whitelist-overview",
 					"roles": []
+				},
+				{
+					"name": "Live Map",
+					"icon": "mdi-eye",
+					"to": "/administration/live-map",
+					"roles": ["asd"]
 				}
 			]
 		},

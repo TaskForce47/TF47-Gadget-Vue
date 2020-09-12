@@ -240,3 +240,32 @@ export interface UsersByWhitelistEntity {
 	description: string;
 }
 
+export interface PlayerStats {
+	id: number;
+	playerName: string;
+	playerUid: string;
+	playerNameFirstConnect: string;
+	playerFirstTimeSeen: string;
+	lastTimeSeen: string;
+	numberConnections: number;
+	timePlayedTotal: number;
+	timePlayedBase: number;
+	timePlayedObjective: number;
+	timePlayedInfantry: number;
+	timePlayedVehicleSmall: number;
+	timePlayedVehicleTracked: number;
+	timePlayedVehicleHelicopter: number;
+	timePlayedVehiclePlane: number;
+	killsInfantry: number;
+	killsVehicleSmall: number;
+	killsVehicleTracked: number;
+	killsVehicleHelicopter: number;
+	killsVehiclePlane: number;
+	deathsInfantry: number;
+	deathsVehicleSmall: number;
+	deathsVehicleTracked: number;
+	deathsVehicleHelicopter: number;
+	deathsVehiclePlane: number;
+	isBanned: boolean;
+	bannedUntil?: null;
+}

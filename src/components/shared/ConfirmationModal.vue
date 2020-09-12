@@ -26,7 +26,7 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 @Component
 export default class ConfirmationModal extends Vue {
-	@Prop({ default: false, type: Boolean }) private showModal: boolean = false;
+	@Prop({ default: false, type: Boolean }) private showModal: boolean | undefined;
 	@Watch('showModal')
 	onValueChange(value: boolean) {
 		if (!value) {

@@ -105,12 +105,11 @@ export default class SquadTable extends Vue {
 	private addDialog = false;
 	private loading = false;
 	public headers = [
-		{ text: 'ID', align: 'center', sortable: true, value: 'id' },
-		{ text: 'Name', align: 'center', sortable: true, value: 'squadName' },
-		{ text: 'Title', value: 'squadTitle', align: 'center', sortable: true },
-		{ text: 'Nick', value: 'squadNick', align: 'center', sortable: true },
-		{ text: 'Web', value: 'squadWeb', align: 'center', sortable: true },
-		{ text: 'E-Mail', value: 'squadEmail', align: 'center', sortable: true },
+		{ text: 'Name', align: 'center', sortable: false, value: 'squadName' },
+		{ text: 'Title', value: 'squadTitle', align: 'center', sortable: false },
+		{ text: 'Nick', value: 'squadNick', align: 'center', sortable: false },
+		{ text: 'Web', value: 'squadWeb', align: 'center', sortable: false },
+		{ text: 'E-Mail', value: 'squadEmail', align: 'center', sortable: false },
 		{ text: 'Actions', value: 'actions', sortable: false },
 	];
 	created() {

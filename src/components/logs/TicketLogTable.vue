@@ -20,7 +20,7 @@
 			<v-chip :color="color(item.ticketChange)" dark>{{ item.ticketChange }}</v-chip>
 		</template>
 		<template v-slot:top>
-			<div class="d-flex">
+			<div class="d-flex flex-column flex-sm-row pa-4">
         <v-spacer></v-spacer>
         <v-btn :disabled="loading" @click="getLatestTickets()" class="mr-1">
           <v-icon>mdi-autorenew</v-icon>

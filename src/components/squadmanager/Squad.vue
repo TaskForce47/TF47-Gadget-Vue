@@ -266,7 +266,6 @@ export default class Squad extends Vue {
 	private addModal = false;
 	private squadModel: SquadI | undefined;
 	private headers = [
-		{ text: 'ID', align: 'center', sortable: true, value: 'userId' },
 		{ text: 'Name', align: 'center', sortable: true, value: 'userSquadName' },
 		{
 			text: 'E-Mail',

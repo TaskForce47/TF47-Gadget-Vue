@@ -54,10 +54,6 @@
             <span>Toggle Dark/Light</span>
           </v-tooltip>
           <notifications></notifications>
-          <v-btn class="ml-2 d-none d-sm-block" disabled outlined text>
-            <v-icon>mdi-bug</v-icon>
-            Report
-          </v-btn>
           <div class="ml-sm-auto text-right">
             &copy; 2020 Task Force 47
           </div>

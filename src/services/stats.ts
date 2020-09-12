@@ -1,10 +1,14 @@
-import { ChatLatest, LatestNotes, SquadXML, TicketsLatest } from '@/services/utils/models';
+import {ChatLatest, LatestNotes, PlayerStats, SquadXML, TicketsLatest} from '@/services/utils/models';
 import { fetchJSON } from '@/services/utils';
 
 export async function getLatestTicketChanges(page: number): Promise<TicketsLatest> {
 	return await fetchJSON(`stats/TicketLog/${page}`, { method: 'GET' });
 }
 
-export async function getLatestChat(page: number, playerName: string, channel: string, rows: number): Promise<ChatLatest> {
+export async function getLatestChat(page: number, playerName: string|undefined, channel: string, rows: number): Promise<ChatLatest> {
 	return await fetchJSON(`stats/chat/${page}?channel=${channel}&playerName=${playerName}&rows=${rows}`, {method: 'GET'});
+}
+
+export async function getStatsForPlayer(playerID: number): Promise<PlayerStats> {
+	return await fetchJSON(`player/${playerID}/stats`, { method: 'GET' });
 }

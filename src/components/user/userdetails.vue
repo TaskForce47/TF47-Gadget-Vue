@@ -18,7 +18,7 @@
 								</template>
 							</v-img>
 							<div class="ml-sm-4" v-if="userDetails">
-								<h1>{{ this.userDetails.profileName }}</h1>
+								<div class="text-sm-h3 text-h4">{{ this.userDetails.profileName }}</div>
 								<h3 style="color: grey;" class="mb-2">
 									{{ userDetails.playerUid }}
 									<span v-if="userDetails.playerUid == null" style="color: red">not set</span>

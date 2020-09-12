@@ -27,9 +27,33 @@
 			<v-chip style="color: black" :color="color(item.type)" dark>{{ item.type }}</v-chip>
 		</template>
 		<template v-slot:top>
-			<div class="d-flex">
+			<div class="d-flex flex-column flex-sm-row pa-4">
         <v-spacer></v-spacer>
-        <v-btn :disabled="loading" @click="getLatestNote()" class="mr-1">
+        <v-text-field
+            @input="
+						getLatestNote();
+						currentPage = 1;
+					"
+            append-icon="mdi-magnify"
+            class="mr-2"
+            hide-details
+            label="Moderator Name"
+            single-line
+            v-model="searchModeratorName"
+        ></v-text-field>
+        <v-text-field
+            @input="
+						getLatestNote();
+						currentPage = 1;
+					"
+            append-icon="mdi-magnify"
+            class="mr-2"
+            hide-details
+            label="Player Name"
+            single-line
+            v-model="searchPlayerName"
+        ></v-text-field>
+        <v-btn :disabled="loading" @click="getLatestNote()" class="mr-1 mt-3 mt-sm-0">
           <v-icon>mdi-autorenew</v-icon>
         </v-btn>
       </div>
@@ -50,6 +74,8 @@ export default class GadgetLogTable extends Vue {
 	private loading: boolean = false;
 	private currentPage: number = 1;
 	private totalNotes: number = 0;
+	private searchPlayerName: string = '';
+	private searchModeratorName: string = '';
 	private headers = [
 		{
       text: 'Moderator',
@@ -73,7 +99,7 @@ export default class GadgetLogTable extends Vue {
 
 	private getLatestNote() {
 		this.loading = true;
-		getLatestNotes(this.currentPage).then((res: LatestNotes) => {
+		getLatestNotes(this.currentPage, this.searchModeratorName, this.searchPlayerName).then((res: LatestNotes) => {
 			this.notes = res.notes;
 			this.totalNotes = res.totalNoteCount;
 			this.loading = false;

@@ -20,6 +20,6 @@ export async function deletePlayerNote(playerNoteId: number | undefined): Promis
 	return await fetchJSON(`playerNotes/${playerNoteId}/delete`, { method: 'DELETE' }, true);
 }
 
-export async function getLatestNotes(page: number): Promise<LatestNotes> {
-	return await fetchJSON(`playerNotes/getLatest/${page}`, { method: 'GET' });
+export async function getLatestNotes(page: number, moderatorName: string, playerName: string): Promise<LatestNotes> {
+	return await fetchJSON(`playerNotes/getLatest/${page}?authorName=${moderatorName}&playerName${playerName}`, { method: 'GET' });
 }

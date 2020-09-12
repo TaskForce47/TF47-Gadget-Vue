@@ -26,6 +26,11 @@ const routes: Array<RouteConfig> = [
 		component: () => import('../views/Dashboard.vue'),
 	},
 	{
+		path: '/planning',
+		name: 'Planning',
+		component: () => import('../views/Planning.vue'),
+	},
+	{
 		path: '/statistics/events',
 		component: () => import('../views/Events.vue'),
 		children: [
@@ -87,8 +92,35 @@ const routes: Array<RouteConfig> = [
 			},
 			{
 				path: 'server-control',
-				name: 'Server Control',
 				component: () => import('../views/ServerControl.vue'),
+				children: [
+					{
+						path: '',
+						name: 'Server Overview',
+						component: () => import('../views/ServerControl/ServerOverview.vue'),
+					},
+					{
+						path: ':id',
+						name: 'Server Detail',
+						component: () => import('../views/ServerControl/Server.vue'),
+					},
+				],
+			}
+		],
+	},
+	{
+		path: '/gallery',
+		component: () => import('../views/Gallery.vue'),
+		children: [
+			{
+				path: '',
+				name: 'Image Overview',
+				component: () => import('../views/Gallery/ImageOverview.vue'),
+			},
+			{
+				path: ':id',
+				name: 'ImageDetail',
+				component: () => import('../views/Gallery/ImageDetailview.vue'),
 			},
 		],
 	},

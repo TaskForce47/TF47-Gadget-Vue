@@ -2,12 +2,12 @@
 const fs = require('fs');
 
 module.exports = {
-	transpileDependencies: ['vuetify'],
+	transpileDependencies: ['vuetify', "@koumoul/vjsf"],
 	devServer: {
 		disableHostCheck: true,
 		https: {
-			key: fs.readFileSync('./certs/taskforce47.com+4-key.pem'),
-			cert: fs.readFileSync('./certs/taskforce47.com+4.pem'),
+			key: fs.readFileSync('./certs/taskforce47.com+5-key.pem'),
+			cert: fs.readFileSync('./certs/taskforce47.com+5.pem'),
 		},
 		public: 'https://gadget.taskforce47.com:8080',
 	},
