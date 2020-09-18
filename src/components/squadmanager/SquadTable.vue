@@ -71,7 +71,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { createSquad, getSquads } from '@/services/squad';
 import Snackbar from '@/components/snackbar/snackbar.vue';
-import { SquadI } from '@/services/utils/models';
+import { SquadI } from '@/models/models';
 @Component({
 	components: { Snackbar },
 })

@@ -218,7 +218,7 @@ export interface WhitelistAllPlayers {
 	id: number;
 	playerName: string;
 	playerUid: string;
-	whitelists?: (WhitelistsEntity)[] | null;
+	whitelists?: WhitelistsEntity[] | null;
 }
 
 export interface WhitelistsEntity {
@@ -229,7 +229,7 @@ export interface WhitelistsEntity {
 
 export interface PlayerByWhitelist {
 	totalUsersWithWhitelist?: number;
-	usersByWhitelist?: (UsersByWhitelistEntity)[] | null;
+	usersByWhitelist?: UsersByWhitelistEntity[] | null;
 }
 
 export interface UsersByWhitelistEntity {

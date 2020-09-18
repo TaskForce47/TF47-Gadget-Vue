@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { getAllPlayers } from '@/services/player';
-import { Player } from '@/services/utils/models';
+import { Player } from '@/models/models';
 @Component
 export default class PlayerManagerTable extends Vue {
 	public players: Array<Player> = [];
@@ -48,7 +48,7 @@ export default class PlayerManagerTable extends Vue {
 			this.width = playerManager.clientWidth;
 		} else {
 			this.width = 250;
-      this.height = playerManager.clientHeight - 70;
+			this.height = playerManager.clientHeight - 70;
 		}
 	}
 }

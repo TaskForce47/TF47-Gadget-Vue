@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { ChatLatest, LatestNotes, NotesEntity, ChatsEntity } from '../../services/utils/models';
+import { ChatLatest, ChatsEntity } from '@/models/models';
 import { getColor } from '@/services/utils/color';
 import { getLatestChat } from '@/services/stats';
 @Component
@@ -115,16 +115,16 @@ export default class ChatLogTable extends Vue {
 	private searchPlayerName: string = '';
 	private rows: number = 20;
 	private messages: ChatsEntity[] | null | undefined = [];
-  private autoReload: any;
+	private autoReload: any;
 	mounted() {
 		this.getLatestChat();
-    this.autoReload = setInterval(() => this.getLatestChat(), 10000);
+		this.autoReload = setInterval(() => this.getLatestChat(), 10000);
 	}
 	$destroy() {
-	  clearInterval(this.autoReload);
-  }
+		clearInterval(this.autoReload);
+	}
 
-  private getLatestChat() {
+	private getLatestChat() {
 		this.loading = true;
 		getLatestChat(this.currentPage, this.searchPlayerName, this.selectedChannel, this.rows).then(
 			(res: ChatLatest) => {

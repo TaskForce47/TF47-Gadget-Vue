@@ -1,5 +1,5 @@
 import { fetchJSON } from '@/services/utils';
-import { GadgetUser } from '@/services/utils/models';
+import { GadgetUser } from '@/models/models';
 
 export async function getGadgetUser(gadgetUserId: number): Promise<GadgetUser> {
 	return await fetchJSON(`gadgetUser/${gadgetUserId}`, { method: 'GET' });

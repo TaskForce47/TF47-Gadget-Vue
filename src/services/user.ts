@@ -1,5 +1,5 @@
 import { fetchJSON } from './utils';
-import { GetSquad, IUserDetails, PlayerUid, WhitelistSelf } from '@/services/utils/models';
+import { GetSquad, IUserDetails, PlayerUid, WhitelistSelf } from '@/models/models';
 
 export async function authenticate(): Promise<boolean> {
 	return await fetchJSON('user/authenticate', { method: 'GET' }, true);

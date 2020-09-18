@@ -4,13 +4,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import EventTable from '@/components/events/event-table.vue';
-@Component({
-	components: {
-		EventTable,
-	},
-})
-export default class Events extends Vue {}
+@Component
+export default class Missions extends Vue {}
 </script>
 
 <style scoped></style>

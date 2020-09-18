@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="z-index: 10">
 		<template v-if="!burger">
 			<template v-for="(navlink, index) in navigationLink.links">
 				<template
@@ -76,7 +76,7 @@
 				right
 				absolute
 				v-model="showMenu"
-				style="margin-top: 60px"
+				style="margin-top: 60px; z-index: 10"
 				color="backgroundTop"
 				width="85%"
 			>

@@ -1,4 +1,6 @@
 # gadget.taskforce47.com
+#Task Force 47 Statistics and Administration Tool
+
 
 ## Project setup
 ```
@@ -22,3 +24,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+Contains code from [Gruppe Adler](https://github.com/gruppe-adler)

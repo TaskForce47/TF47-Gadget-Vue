@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { IUserDetails, WhitelistSelf } from '@/services/utils/models';
+import { IUserDetails, WhitelistSelf } from '@/models/models';
 
 import { getUserDetails, getWhitelist } from '@/services/user';
 import UserSettings from '@/components/user/UserSettings.vue';

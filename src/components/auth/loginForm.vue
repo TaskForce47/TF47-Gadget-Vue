@@ -1,36 +1,36 @@
 <template>
 	<div>
-    <TF47Form :schema="registerSchema"></TF47Form>
-  </div>
+		<TF47Form :schema="registerSchema"></TF47Form>
+	</div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Watch} from 'vue-property-decorator';
-import TF47Form from "@/components/shared/TF47-Form.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import TF47Form from '@/components/shared/TF47-Form.vue';
 @Component({
-  components: { TF47Form },
+	components: { TF47Form },
 })
 export default class LoginForm extends Vue {
-  private registerSchema = {
-    type: 'object',
-    required: ['userName', 'userPassword'],
-    properties: {
-      userName: {
-        type: 'string',
-        title: 'Username',
-        minLength: 10,
-        maxLength: 100,
-      },
-      userPassword: {
-        type: 'string',
-        title: 'Password',
-        minLength: 10,
-        'x-props': {
-          type: 'password',
-        },
-      },
-    },
-  };
+	private registerSchema = {
+		type: 'object',
+		required: ['userName', 'userPassword'],
+		properties: {
+			userName: {
+				type: 'string',
+				title: 'Username',
+				minLength: 10,
+				maxLength: 100,
+			},
+			userPassword: {
+				type: 'string',
+				title: 'Password',
+				minLength: 10,
+				'x-props': {
+					type: 'password',
+				},
+			},
+		},
+	};
 }
 </script>
 

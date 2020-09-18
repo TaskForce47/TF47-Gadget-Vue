@@ -28,43 +28,43 @@
 		</template>
 		<template v-slot:top>
 			<div class="d-flex flex-column flex-sm-row pa-4">
-        <v-spacer></v-spacer>
-        <v-text-field
-            @input="
+				<v-spacer></v-spacer>
+				<v-text-field
+					@input="
 						getLatestNote();
 						currentPage = 1;
 					"
-            append-icon="mdi-magnify"
-            class="mr-2"
-            hide-details
-            label="Moderator Name"
-            single-line
-            v-model="searchModeratorName"
-        ></v-text-field>
-        <v-text-field
-            @input="
+					append-icon="mdi-magnify"
+					class="mr-2"
+					hide-details
+					label="Moderator Name"
+					single-line
+					v-model="searchModeratorName"
+				></v-text-field>
+				<v-text-field
+					@input="
 						getLatestNote();
 						currentPage = 1;
 					"
-            append-icon="mdi-magnify"
-            class="mr-2"
-            hide-details
-            label="Player Name"
-            single-line
-            v-model="searchPlayerName"
-        ></v-text-field>
-        <v-btn :disabled="loading" @click="getLatestNote()" class="mr-1 mt-3 mt-sm-0">
-          <v-icon>mdi-autorenew</v-icon>
-        </v-btn>
-      </div>
+					append-icon="mdi-magnify"
+					class="mr-2"
+					hide-details
+					label="Player Name"
+					single-line
+					v-model="searchPlayerName"
+				></v-text-field>
+				<v-btn :disabled="loading" @click="getLatestNote()" class="mr-1 mt-3 mt-sm-0">
+					<v-icon>mdi-autorenew</v-icon>
+				</v-btn>
+			</div>
 		</template>
 	</v-data-table>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { LatestNotes, NotesEntity } from '../../services/utils/models';
-import { getLatestNotes } from '../../services/playerNotes';
+import { LatestNotes, NotesEntity } from '@/models/models';
+import { getLatestNotes } from '@/services/playerNotes';
 import { getColor } from '@/services/utils/color';
 @Component
 export default class GadgetLogTable extends Vue {
@@ -78,20 +78,20 @@ export default class GadgetLogTable extends Vue {
 	private searchModeratorName: string = '';
 	private headers = [
 		{
-      text: 'Moderator',
-      align: 'start',
-      sortable: false,
-      value: 'author',
-    },
-    {
-      text: 'Player',
-      value: 'playerName',
-      sortable: false,
-    },
-    {text: 'Date', value: 'timeWritten', sortable: false},
-    {text: 'Type', value: 'type', sortable: false},
-    {text: '', value: 'data-table-expand', sortable: false},
-  ];
+			text: 'Moderator',
+			align: 'start',
+			sortable: false,
+			value: 'author',
+		},
+		{
+			text: 'Player',
+			value: 'playerName',
+			sortable: false,
+		},
+		{ text: 'Date', value: 'timeWritten', sortable: false },
+		{ text: 'Type', value: 'type', sortable: false },
+		{ text: '', value: 'data-table-expand', sortable: false },
+	];
 	private notes: NotesEntity[] | null | undefined = [];
 	mounted() {
 		this.getLatestNote();

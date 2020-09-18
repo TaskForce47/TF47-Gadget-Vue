@@ -1,5 +1,5 @@
 import { fetchJSON, uploadFile } from '@/services/utils';
-import { SquadI, SquadCreate, SquadMemberAdd, SquadMemberUpdate, SquadUpdate, SquadXML } from '@/services/utils/models';
+import { SquadI, SquadCreate, SquadMemberAdd, SquadMemberUpdate, SquadUpdate, SquadXML } from '@/models/models';
 
 export async function getSquads(): Promise<Array<SquadI>> {
 	return await fetchJSON('squad/getSquads', { method: 'GET' });

@@ -1,4 +1,4 @@
-import { LatestNotes, NoteAddUpdate, NotesEntity } from '@/services/utils/models';
+import { LatestNotes, NoteAddUpdate, NotesEntity } from '@/models/models';
 import { fetchJSON } from '@/services/utils';
 
 export async function addPlayerNote(objPlayerNote: NoteAddUpdate): Promise<boolean> {
@@ -21,5 +21,7 @@ export async function deletePlayerNote(playerNoteId: number | undefined): Promis
 }
 
 export async function getLatestNotes(page: number, moderatorName: string, playerName: string): Promise<LatestNotes> {
-	return await fetchJSON(`playerNotes/getLatest/${page}?authorName=${moderatorName}&playerName${playerName}`, { method: 'GET' });
+	return await fetchJSON(`playerNotes/getLatest/${page}?authorName=${moderatorName}&playerName${playerName}`, {
+		method: 'GET',
+	});
 }

@@ -22,7 +22,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { getAllGadgetUser } from '@/services/gadgetUser';
-import { GadgetUser } from '@/services/utils/models';
+import { GadgetUser } from '@/models/models';
 import { addSquadMember } from '@/services/squad';
 @Component
 export default class SquadMemberTable extends Vue {

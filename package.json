@@ -5,9 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 8080",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prettier": "prettier --write \"**/*.vue\""
   },
   "dependencies": {
+    "@gruppe-adler/maps-frontend-utils": "^1.0.7",
     "@koumoul/vjsf": "^1.12.4",
     "core-js": "^3.6.4",
     "register-service-worker": "^1.7.1",
@@ -16,6 +18,7 @@
     "vue-property-decorator": "^8.5.1",
     "vue-router": "^3.3.4",
     "vue-tweet-embed": "^2.4.0",
+    "vuedraggable": "^2.24.1",
     "vuetify": "^2.3.2",
     "vuetify-form-base": "^0.2.4",
     "vuex": "^3.3.0"

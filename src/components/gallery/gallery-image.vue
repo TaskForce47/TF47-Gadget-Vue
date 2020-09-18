@@ -1,6 +1,6 @@
 <template>
 	<v-card height="240px" width="240px" elevation="5" class="pa-2 ml-2 mt-2 mt-md-0">
-		<v-img contain :src="imgLink" height="173px" width="240px" :alt="imgTitle"> </v-img>
+		<v-img contain :src="imgLink" width="240px" :alt="imgTitle"> </v-img>
 		<v-divider class="mt-2"></v-divider>
 		<div>
 			<span class="d-inline-block text-truncate" style="max-width: 240px">Beep Boop Farming Group</span>
@@ -28,5 +28,4 @@ export default class Gallery extends Vue {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

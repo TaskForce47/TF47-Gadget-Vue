@@ -89,9 +89,9 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class ServerCard extends Vue {
 	private value = 79;
 
-  private openServer() {
-    this.$router.push(`/administration/server-control/${1}`);
-  }
+	private openServer() {
+		this.$router.push(`/administration/server-control/${1}`);
+	}
 }
 </script>
 

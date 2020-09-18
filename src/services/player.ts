@@ -1,4 +1,4 @@
-import { BannedUntil, Player, PlayerNotes, PlayerStats } from '@/services/utils/models';
+import { BannedUntil, Player, PlayerNotes, PlayerStats } from '@/models/models';
 import { fetchJSON } from '@/services/utils';
 
 export async function getAllPlayers(): Promise<Array<Player>> {

@@ -23,7 +23,7 @@
 				<v-main
 					class="mt-9 px-9"
 					:style="{ background: $vuetify.theme.themes[theme].background }"
-					style="padding-bottom: 5rem"
+					style="padding-bottom: 5rem; z-index: 1"
 				>
 					<router-view />
 					<v-snackbar
@@ -43,21 +43,21 @@
 					<v-tooltip top>
 						<template v-slot:activator="{ on }">
 							<v-checkbox
-                  class="mt-5 mr-2 ml-5"
-                  v-model="$vuetify.theme.dark"
-                  on-icon="mdi-white-balance-sunny"
-                  off-icon="mdi-weather-night"
-                  color="white"
-                  v-on="on"
-              ></v-checkbox>
-            </template>
-            <span>Toggle Dark/Light</span>
-          </v-tooltip>
-          <notifications></notifications>
-          <div class="ml-sm-auto text-right">
-            &copy; 2020 Task Force 47
-          </div>
-        </v-footer>
+								class="mt-5 mr-2 ml-5"
+								v-model="$vuetify.theme.dark"
+								on-icon="mdi-white-balance-sunny"
+								off-icon="mdi-weather-night"
+								color="white"
+								v-on="on"
+							></v-checkbox>
+						</template>
+						<span>Toggle Dark/Light</span>
+					</v-tooltip>
+					<notifications></notifications>
+					<div class="ml-sm-auto text-right">
+						&copy; 2020 Task Force 47
+					</div>
+				</v-footer>
 			</v-app>
 		</div>
 		<div
@@ -74,7 +74,8 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import Notifications from '@/components/notifications/notifications.vue';
 import { authenticate, getRoles } from '@/services/user';
 import Navigation from '@/components/shared/Navigation.vue';
-
+import { setApiUri } from '@gruppe-adler/maps-frontend-utils';
+import { WMTS_BASE_URL } from './ApiUtils';
 @Component({
 	components: { Navigation, Notifications },
 })
@@ -86,7 +87,9 @@ export default class App extends Vue {
 	public get theme() {
 		return this.$vuetify.theme.dark ? 'dark' : 'light';
 	}
+
 	created() {
+		setApiUri(WMTS_BASE_URL);
 		this.$vuetify.theme.dark = this.dark;
 		this.ready = false;
 		authenticate().then(

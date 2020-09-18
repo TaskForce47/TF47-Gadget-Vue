@@ -21,19 +21,18 @@
 		</template>
 		<template v-slot:top>
 			<div class="d-flex flex-column flex-sm-row pa-4">
-        <v-spacer></v-spacer>
-        <v-btn :disabled="loading" @click="getLatestTickets()" class="mr-1">
-          <v-icon>mdi-autorenew</v-icon>
-        </v-btn>
-      </div>
+				<v-spacer></v-spacer>
+				<v-btn :disabled="loading" @click="getLatestTickets()" class="mr-1">
+					<v-icon>mdi-autorenew</v-icon>
+				</v-btn>
+			</div>
 		</template>
 	</v-data-table>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { ChatLatest, LatestNotes, NotesEntity, TicketsLatest, TicketLogEntity } from '../../services/utils/models';
-import { getLatestNotes } from '../../services/playerNotes';
+import { TicketsLatest, TicketLogEntity } from '@/models/models';
 import { getColor } from '@/services/utils/color';
 import { getLatestTicketChanges } from '@/services/stats';
 @Component
@@ -45,12 +44,12 @@ export default class TicketLogTable extends Vue {
 	private currentPage: number = 1;
 	private totalTicketUpdates: number = 0;
 	private headers = [
-    {text: 'Date', value: 'ticketChangeTime', sortable: false},
-    {text: 'Mission', value: 'missionName', sortable: false},
-    {text: 'Message', value: 'message', sortable: false},
-    {text: 'Current Ticket Count', value: 'ticketNow', sortable: false},
-    {text: 'Change', value: 'ticketChange', sortable: false},
-  ];
+		{ text: 'Date', value: 'ticketChangeTime', sortable: false },
+		{ text: 'Mission', value: 'missionName', sortable: false },
+		{ text: 'Message', value: 'message', sortable: false },
+		{ text: 'Current Ticket Count', value: 'ticketNow', sortable: false },
+		{ text: 'Change', value: 'ticketChange', sortable: false },
+	];
 	private tickets: TicketLogEntity[] | null | undefined = [];
 	mounted() {
 		this.getLatestTickets();

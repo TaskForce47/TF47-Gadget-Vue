@@ -31,19 +31,25 @@ const routes: Array<RouteConfig> = [
 		component: () => import('../views/Planning.vue'),
 	},
 	{
-		path: '/statistics/events',
-		component: () => import('../views/Events.vue'),
+		path: '/missions',
+		component: () => import('../views/Missions.vue'),
 		children: [
 			{
-				path: '/',
-				name: 'EventTable',
-				component: () => import('../components/events/event-table.vue'),
+				path: 'attendance',
+				name: 'Attendance',
+				component: () => import('../views/Missions/MissionAttendance.vue'),
 			},
 			{
-				path: ':id',
-				name: 'oo',
-				component: () => import('../views/Events.vue'),
-				props: true,
+				path: 'after-action-report',
+				name: 'After Action Report Overview',
+				component: () => import('../views/Missions/MissionAfterActionReportOverview.vue'),
+				children: [
+					{
+						path: ':id',
+						name: 'After Action Report',
+						component: () => import('../views/Missions/MissionAfterActionReport.vue'),
+					},
+				],
 			},
 		],
 	},
@@ -105,7 +111,18 @@ const routes: Array<RouteConfig> = [
 						component: () => import('../views/ServerControl/Server.vue'),
 					},
 				],
-			}
+			},
+			{
+				path: 'discord',
+				component: () => import('../views/Discord.vue'),
+				children: [
+					{
+						path: '',
+						name: 'Discord Server Overview',
+						component: () => import('../views/DiscordManager/DiscordOverview.vue'),
+					},
+				],
+			},
 		],
 	},
 	{

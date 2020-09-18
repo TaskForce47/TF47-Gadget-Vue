@@ -120,6 +120,10 @@
 							Stats
 							<v-icon>mdi-chart-line-variant</v-icon>
 						</v-btn>
+						<v-btn outlined class="mt-2" @click.stop="missionAttendanceModal = true">
+							Attendance
+							<v-icon>mdi-flag-plus</v-icon>
+						</v-btn>
 						<v-btn outlined class="mt-2" @click.stop="chatModal = true">
 							Chatlog
 							<v-icon>mdi-chat</v-icon>
@@ -310,6 +314,14 @@
 				v-on:close="chatModal = false"
 				:search-player-name="userDetails.name"
 			></PlayerChatDialog>
+			<PlayerAttendanceDialog
+				v-if="userDetails && missionAttendanceModal"
+				:show-modal="missionAttendanceModal"
+				:search-player-name="userDetails.name"
+				:search-forum-uid="userDetails.gadgetUser.id"
+				v-on:close="missionAttendanceModal = false"
+			>
+			</PlayerAttendanceDialog>
 		</template>
 		<v-progress-circular v-if="!ready" indeterminate color="grey lighten-5"></v-progress-circular>
 		<template v-if="ready && !userDetails"> <h1>No player found</h1> </template>
@@ -327,7 +339,7 @@ import {
 	WhitelistPlayer,
 	WhitelistPlayerAdd,
 	WhitelistsEntity,
-} from '@/services/utils/models';
+} from '@/models/models';
 import { banPlayer, getPlayerDetails, getPlayerNotes, unbanPlayer } from '@/services/player';
 import { applyWhitelist, getPlayerWhitelist } from '@/services/whitelist';
 import { addPlayerNote, deletePlayerNote, updatePlayerNote } from '@/services/playerNotes';
@@ -336,8 +348,9 @@ import ConfirmationModal from '@/components/shared/ConfirmationModal.vue';
 import StatTables from '@/components/stats/StatTables.vue';
 import { getStatsForPlayer } from '@/services/stats';
 import PlayerChatDialog from '@/components/playermanager/PlayerChatDialog.vue';
+import PlayerAttendanceDialog from '@/components/playermanager/PlayerAttendanceDialog.vue';
 @Component({
-	components: { PlayerChatDialog, StatTables, ConfirmationModal },
+	components: { PlayerAttendanceDialog, PlayerChatDialog, StatTables, ConfirmationModal },
 })
 export default class PlayerProfile extends Vue {
 	private userDetails: Player | null = null;
@@ -367,6 +380,7 @@ export default class PlayerProfile extends Vue {
 	};
 	private noteToDeleteModel: NotesEntity | undefined;
 	private chatModal: boolean = false;
+	private missionAttendanceModal: boolean = false;
 	private headers = [
 		{
 			text: 'Moderator',

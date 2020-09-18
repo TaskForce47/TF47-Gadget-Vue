@@ -6,15 +6,15 @@
 				<v-spacer></v-spacer>
 				<div class="d-flex">
 					<v-select
-							:items="whitelists"
-							label="Type"
-							item-text="description"
-							item-value="id"
-							single-line
-							hide-details
-							class="mr-2"
-							v-model="selectedWhitelist"
-							@change="getPlayerWhitelist()"
+						:items="whitelists"
+						label="Type"
+						item-text="description"
+						item-value="id"
+						single-line
+						hide-details
+						class="mr-2"
+						v-model="selectedWhitelist"
+						@change="getPlayerWhitelist()"
 					></v-select>
 					<v-btn @click="refresh()" style="margin-left: 1rem">
 						<v-icon>mdi-autorenew</v-icon>
@@ -22,16 +22,16 @@
 				</div>
 			</v-card-title>
 			<v-data-table
-					:headers="headers"
-					:items="whitelistPlayer.usersByWhitelist"
-					:search="search"
-					:loading="loading"
-					:server-items-length="whitelistPlayer.totalUsersWithWhitelist"
-					:page.sync="currentPage"
-					v-on:update:page="getPlayerWhitelist()"
-					v-on:update:items-per-page="getPlayerWhitelist()"
-					:items-per-page.sync="numItems"
-					:footer-props="{
+				:headers="headers"
+				:items="whitelistPlayer.usersByWhitelist"
+				:search="search"
+				:loading="loading"
+				:server-items-length="whitelistPlayer.totalUsersWithWhitelist"
+				:page.sync="currentPage"
+				v-on:update:page="getPlayerWhitelist()"
+				v-on:update:items-per-page="getPlayerWhitelist()"
+				:items-per-page.sync="numItems"
+				:footer-props="{
 					'items-per-page-options': $tstore.state.globalRowsPerTable,
 				}"
 			>
@@ -45,8 +45,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import {getAvailableWhitelist, getUserByWhitelist} from "@/services/whitelist";
-import {AvailableWhitelist, PlayerByWhitelist} from "@/services/utils/models";
+import { getAvailableWhitelist, getUserByWhitelist } from '@/services/whitelist';
+import { AvailableWhitelist, PlayerByWhitelist } from '@/models/models';
 @Component
 export default class WhitelistOverview extends Vue {
 	private whitelists: Array<AvailableWhitelist> = [];
@@ -55,22 +55,22 @@ export default class WhitelistOverview extends Vue {
 	private search = '';
 	private loading = true;
 	private numItems: number;
-	private headers = [
-		{ text: 'Player Name', align: 'center', sortable: false, value: 'playerName' },
-	]
-	private selectedWhitelist : number = 1;
-	private getAvailableWhitelists(){
+	private headers = [{ text: 'Player Name', align: 'center', sortable: false, value: 'playerName' }];
+	private selectedWhitelist: number = 1;
+	private getAvailableWhitelists() {
 		getAvailableWhitelist().then((whitelists: Array<AvailableWhitelist>) => {
 			this.whitelists = whitelists;
-		})
+		});
 	}
-	private getPlayerWhitelist(){
-		getUserByWhitelist(this.currentPage, this.numItems, this.selectedWhitelist).then((whitelistPlayer: PlayerByWhitelist) =>{
-			this.whitelistPlayer = whitelistPlayer;
-			this.loading = false;
-		})
+	private getPlayerWhitelist() {
+		getUserByWhitelist(this.currentPage, this.numItems, this.selectedWhitelist).then(
+			(whitelistPlayer: PlayerByWhitelist) => {
+				this.whitelistPlayer = whitelistPlayer;
+				this.loading = false;
+			}
+		);
 	}
-	mounted(){
+	mounted() {
 		this.getAvailableWhitelists();
 		this.getPlayerWhitelist();
 	}
@@ -79,7 +79,7 @@ export default class WhitelistOverview extends Vue {
 		this.numItems = Number(this.getItemsPerPage);
 	}
 
-	private refresh(){
+	private refresh() {
 		this.getPlayerWhitelist();
 		this.getAvailableWhitelists();
 	}

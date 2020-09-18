@@ -12,9 +12,7 @@
 			"name": "Stats",
 			"tooltip": "",
 			"to": "/",
-			"roles": [
-				"fdaes"
-			],
+			"roles": ["fdaes"],
 			"icon": "",
 			"sublinks": [
 				{
@@ -41,7 +39,7 @@
 			"name": "Gallery",
 			"tooltip": "Gallery",
 			"to": "/gallery",
-			"roles": ["Admin"],
+			"roles": ["Moderator", "Admin"],
 			"icon": "mdi-folder-image",
 			"sublinks": []
 		},
@@ -49,28 +47,46 @@
 			"name": "Planning",
 			"tooltip": "Planning",
 			"to": "/planning",
-			"roles": ["Admin"],
+			"roles": ["Moderator", "Admin"],
 			"icon": "mdi-map-outline",
 			"sublinks": []
+		},
+		{
+			"name": "Missions",
+			"tooltip": "",
+			"to": "/missions",
+			"roles": [],
+			"icon": "mdi-flag",
+			"sublinks": [
+				{
+					"name": "Attendance",
+					"icon": "mdi-flag-plus",
+					"to": "/missions/attendance",
+					"roles": []
+				},
+				{
+					"name": "After Action Report",
+					"icon": "mdi-clipboard-check",
+					"to": "/missions/after-action-report",
+					"roles": ["Moderator", "Admin"]
+				}
+			]
 		},
 		{
 			"name": "Administration",
 			"tooltip": "",
 			"to": "/",
-			"roles": [
-				"Admin",
-				"Moderator"
-			],
+			"roles": ["Admin", "Moderator"],
 			"icon": "",
 			"sublinks": [
 				{
-					"name": "Playermanager",
+					"name": "Player Manager",
 					"icon": "mdi-account-cog",
 					"to": "/administration/playermanager",
 					"roles": []
 				},
 				{
-					"name": "Squadmanager",
+					"name": "Squad Manager",
 					"icon": "mdi-account-supervisor",
 					"to": "/administration/squadmanager",
 					"roles": []
@@ -88,6 +104,12 @@
 					"roles": []
 				},
 				{
+					"name": "Discord Manager",
+					"icon": "mdi-discord",
+					"to": "/administration/discord",
+					"roles": ["Admin"]
+				},
+				{
 					"name": "Whitelist",
 					"icon": "mdi-clipboard-list",
 					"to": "/administration/whitelist-overview",
@@ -97,7 +119,7 @@
 					"name": "Live Map",
 					"icon": "mdi-eye",
 					"to": "/administration/live-map",
-					"roles": ["asd"]
+					"roles": ["Admin"]
 				}
 			]
 		},

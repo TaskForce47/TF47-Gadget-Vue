@@ -21,6 +21,10 @@
 				<v-icon>mdi-restart</v-icon>
 			</v-btn>
 			<v-btn class="ml-md-2 mt-4 mt-md-0" color="warning" outlined>
+				Lock
+				<v-icon>mdi-lock</v-icon>
+			</v-btn>
+			<v-btn class="ml-md-2 mt-4 mt-md-0" color="warning" outlined>
 				Restart
 				<v-icon>mdi-restart</v-icon>
 			</v-btn>
@@ -63,34 +67,25 @@
 				</div>
 			</div>
 		</div>
-		<v-tabs color="info" grow class="mt-4 px-4">
-			<v-tab>Graphs</v-tab>
+		<v-tabs color="info" grow class="mt-4 px-4" show-arrows>
+			<!--<v-tab>Graphs</v-tab>-->
 			<v-tab>Players</v-tab>
 			<v-tab>Mods</v-tab>
+			<v-tab>Missions</v-tab>
+			<v-tab>Bans</v-tab>
 			<v-tab>Configuration</v-tab>
+			<!--<v-tab-item class="mt-4"> </v-tab-item>-->
+			<v-tab-item class="mt-4">
+				<ServerPlayers></ServerPlayers>
+			</v-tab-item>
+			<v-tab-item class="mt-4">
+				<ServerMods></ServerMods>
+			</v-tab-item>
 			<v-tab-item class="mt-4"> </v-tab-item>
 			<v-tab-item class="mt-4">
-				<v-data-table
-					:headers="headers"
-					:items="players"
-					:items-per-page="numItems"
-					:loading="loading"
-					:footer-props="{
-						'items-per-page-options': $tstore.state.globalRowsPerTable,
-					}"
-				>
-					<template v-slot:item.actions="{ item }">
-						<v-icon small class="mr-2">
-							mdi-magnify
-						</v-icon>
-						<v-icon small class="mr-2" @click="item" color="red">
-							mdi-close-circle
-						</v-icon>
-					</template>
-				</v-data-table>
+				<ServerBans></ServerBans>
 			</v-tab-item>
-			<v-tab-item> </v-tab-item>
-			<v-tab-item>
+			<v-tab-item class="mt-4">
 				<server-configuration-form></server-configuration-form>
 			</v-tab-item>
 		</v-tabs>
@@ -100,61 +95,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ServerConfigurationForm from '@/components/server-control/ServerConfigurationForm.vue';
+import ServerPlayers from '@/components/server-control/ServerPlayers.vue';
+import ServerMods from '@/components/server-control/ServerMods.vue';
+import ServerBans from '@/components/server-control/ServerBans.vue';
 @Component({
-	components: { ServerConfigurationForm },
+	components: { ServerBans, ServerMods, ServerPlayers, ServerConfigurationForm },
 })
-export default class Server extends Vue {
-	constructor() {
-		super();
-		this.numItems = Number(this.getItemsPerPage);
-	}
-	private loading = false;
-
-	private numItems: number | null;
-	private players = [
-		{
-			name: 'Lucke',
-			time: '1.5h',
-			score: '69',
-			guid: '6d703719e35473ccf770ef4d4f57b1dd',
-		},
-		{
-			name: 'BlackPixxel',
-			time: '2.5h',
-			score: '500',
-			guid: '6d703719e35473ccf770ef4d4f57b1dd',
-		},
-		{
-			name: 'Symrex',
-			time: '0.2h',
-			score: '0',
-			guid: '6d703719e35473cad234dfsfddfasd17',
-		},
-		{
-			name: 'Mudokon',
-			time: '5.0h',
-			score: '> 9000',
-			guid: '6d703719e35473ccdfgvbvvbcx57b1dd',
-		},
-		{
-			name: 'RednecksRevenge',
-			time: '1337h',
-			score: '8000',
-			guid: '6d703719e35473037370ef4d4f57b1dd',
-		},
-	];
-
-	public headers = [
-		{ text: 'Name', align: 'center', sortable: false, value: 'name' },
-		{ text: 'Time', value: 'time', align: 'center', sortable: false },
-		{ text: 'Score', value: 'score', align: 'center', sortable: false },
-		{ text: 'GUID', value: 'guid', align: 'center', sortable: false },
-		{ text: 'Actions', value: 'actions', sortable: false },
-	];
-	private get getItemsPerPage() {
-		return localStorage.getItem('defaultRowsPerPage') !== null ? localStorage.getItem('defaultRowsPerPage') : '10';
-	}
-}
+export default class Server extends Vue {}
 </script>
 
 <style scoped></style>

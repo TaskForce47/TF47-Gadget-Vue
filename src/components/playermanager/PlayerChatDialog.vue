@@ -2,7 +2,7 @@
 	<div>
 		<v-dialog v-model="showModal" scrollable width="fit-conteht" persistent>
 			<v-card>
-				<v-card-title>Chatlog for {{searchPlayerName}}</v-card-title>
+				<v-card-title>Chatlog for {{ searchPlayerName }}</v-card-title>
 				<v-divider></v-divider>
 				<v-data-table
 					:headers="headers"
@@ -49,7 +49,7 @@
 				</v-data-table>
 				<v-divider></v-divider>
 				<v-card-actions>
-          <v-spacer></v-spacer>
+					<v-spacer></v-spacer>
 					<v-btn color="blue darken-1" text @click="showModal = false">Close</v-btn>
 				</v-card-actions>
 			</v-card>
@@ -60,7 +60,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { getColor } from '@/services/utils/color';
-import { ChatLatest, ChatsEntity } from '@/services/utils/models';
+import { ChatLatest, ChatsEntity } from '@/models/models';
 import { getLatestChat } from '@/services/stats';
 @Component
 export default class PlayerChatDialog extends Vue {
@@ -128,19 +128,17 @@ export default class PlayerChatDialog extends Vue {
 	mounted() {
 		this.getLatestChat();
 	}
-	get playerName(){
-	  return this.searchPlayerName;
-  }
+	get playerName() {
+		return this.searchPlayerName;
+	}
 
 	private getLatestChat() {
 		this.loading = true;
-		getLatestChat(this.currentPage, this.playerName, this.selectedChannel, this.rows).then(
-			(res: ChatLatest) => {
-				this.messages = res.chats;
-				this.totalNotes = res.totalChatCount;
-				this.loading = false;
-			}
-		);
+		getLatestChat(this.currentPage, this.playerName, this.selectedChannel, this.rows).then((res: ChatLatest) => {
+			this.messages = res.chats;
+			this.totalNotes = res.totalChatCount;
+			this.loading = false;
+		});
 	}
 }
 </script>

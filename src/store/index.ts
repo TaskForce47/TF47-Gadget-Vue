@@ -11,9 +11,9 @@ export interface RootState {
 
 export default new Vuex.Store<RootState>({
 	state: {
-		snackbar: {showing: false, text: '', type: 'success', timeout: '5000', timestamp: Date.now()},
-		auth: {loggedIn: false, roles: []},
-		globalRowsPerTable: [10, 15, 20, 25, 30, 35, 40, 45, 50]
+		snackbar: { showing: false, text: '', type: 'success', timeout: '5000', timestamp: Date.now() },
+		auth: { loggedIn: false, roles: [] },
+		globalRowsPerTable: [10, 15, 20, 25, 30, 35, 40, 45, 50],
 	},
 	mutations: {
 		SET_SNACKBAR(state, snackbar) {
@@ -32,18 +32,18 @@ export default new Vuex.Store<RootState>({
 		},
 		SET_ROLES(state, roles) {
 			state.auth.roles = roles;
-		}
+		},
 	},
 	actions: {
 		setSnackbar({ commit }, snackbar) {
 			commit('SET_SNACKBAR', snackbar);
 		},
-		setLoggedIn({commit}, loggedIn) {
+		setLoggedIn({ commit }, loggedIn) {
 			commit('SET_LOGGEDIN', loggedIn);
 		},
-		setRoles({commit}, roles) {
+		setRoles({ commit }, roles) {
 			commit('SET_ROLES', roles);
-		}
+		},
 	},
 	modules: {},
 	getters: {
@@ -53,6 +53,6 @@ export default new Vuex.Store<RootState>({
 			} else {
 				return localStorage.getItem('defaultRowsPerPage');
 			}
-		}
-	}
+		},
+	},
 });

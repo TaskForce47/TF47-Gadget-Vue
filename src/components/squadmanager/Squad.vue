@@ -256,7 +256,7 @@ import {
 	uploadSquadPicture,
 } from '@/services/squad';
 import SquadMemberTable from '@/components/squadmanager/SquadMemberTable.vue';
-import { SquadI } from '@/services/utils/models';
+import { SquadI } from '@/models/models';
 @Component({
 	components: { SquadMemberTable },
 })
