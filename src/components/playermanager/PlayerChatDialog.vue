@@ -1,5 +1,9 @@
 <template>
-	<div>
+	<div class="d-flex flex-column">
+		<v-btn outlined class="mt-2" @click="showModal = true">
+			Chatlog
+			<v-icon>mdi-chat</v-icon>
+		</v-btn>
 		<v-dialog v-model="showModal" scrollable width="fit-conteht" persistent>
 			<v-card>
 				<v-card-title>Chatlog for {{ searchPlayerName }}</v-card-title>
@@ -64,7 +68,7 @@ import { ChatLatest, ChatsEntity } from '@/models/models';
 import { getLatestChat } from '@/services/stats';
 @Component
 export default class PlayerChatDialog extends Vue {
-	@Prop({ default: false, type: Boolean }) private showModal: boolean | undefined;
+	private showModal: boolean = false;
 	@Prop({ default: '', type: String }) private searchPlayerName: string | undefined;
 	private color(type: string) {
 		return getColor(type);

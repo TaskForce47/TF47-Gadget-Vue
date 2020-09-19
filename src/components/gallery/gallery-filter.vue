@@ -29,6 +29,7 @@ import GalleryTag from '@/components/gallery/gallery-tag.vue';
 })
 export default class GalleryFilter extends Vue {
 	private sortingOptions: Array<string> = ['Newest', 'Most Popular', 'Oldest'];
+	private menu: boolean = false;
 }
 </script>
 

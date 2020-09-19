@@ -1,5 +1,9 @@
 <template>
-	<div>
+	<div class="d-flex flex-column">
+		<v-btn outlined class="mt-2" @click.stop="showModal = true">
+			Attendance
+			<v-icon>mdi-flag-plus</v-icon>
+		</v-btn>
 		<v-dialog v-model="modalOpen" scrollable width="fit-conteht" persistent>
 			<v-card style="height: 80vh">
 				<v-card-title
@@ -22,17 +26,11 @@ import AttendanceIframe from '@/components/attendance/attendance-iframe.vue';
 	components: { AttendanceIframe },
 })
 export default class PlayerAttendanceDialog extends Vue {
-	@Prop({ default: false, type: Boolean }) private showModal: boolean | undefined;
+	private showModal: boolean = false;
 	@Prop({ default: '', type: String }) private searchPlayerName: string | undefined;
 	@Prop({ default: undefined, type: Number }) private searchForumUid: number | undefined;
 	get modalOpen() {
 		return this.showModal;
-	}
-	@Watch('showModal')
-	onValueChange(value: boolean) {
-		if (!value) {
-			this.$emit('close');
-		}
 	}
 }
 </script>

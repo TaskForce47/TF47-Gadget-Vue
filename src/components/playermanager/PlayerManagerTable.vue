@@ -17,22 +17,32 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { getAllPlayers } from '@/services/player';
 import { Player } from '@/models/models';
 @Component
 export default class PlayerManagerTable extends Vue {
+	@Prop() profileChanged: boolean = false;
 	public players: Array<Player> = [];
 	public height = 100;
 	public width = 925;
 	private filter = '';
 	private ready = false;
 	mounted() {
+		this.init();
+	}
+
+	private init() {
 		getAllPlayers().then((response: Array<Player>) => {
 			this.players = response;
 			this.ready = true;
 			this.getDimensions();
 		});
+	}
+
+	@Watch('profileChanged')
+	onReload(value: string) {
+		this.init();
 	}
 
 	private get filterPlayers() {
